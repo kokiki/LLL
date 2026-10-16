@@ -1,0 +1,22 @@
+# ---- CSI 데이터셋 (MATLAB 생성, 수 GB~수십 GB) : 생성 스크립트로 재생성 ----
+csi_dataset_*/
+*.mat
+_ntncache_*.pt
+
+# ---- 학습 결과 가중치 (runs/ 아래 best_G.pt 등, 약 28 MB/개) ----
+# 평가 결과 json / 학습 log.csv / result.json 은 작아서 유지
+*.pt
+*.pth
+
+# ---- 생성·실행 로그 (대용량 텍스트) ----
+gen_*.log
+runs/*.log
+
+# ---- Python / 편집기 ----
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+
+# ---- Office 임시 파일 ----
+~$*

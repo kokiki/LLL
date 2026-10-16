@@ -1,0 +1,9 @@
+train Split(E=186, n_sc=12, T=150, dt=1.0ms, NLOS=27, Tp_file=12, Tf_file=16)
+val Split(E=60, n_sc=12, T=150, dt=1.0ms, NLOS=16, Tp_file=12, Tf_file=16)
+test Split(E=68, n_sc=12, T=150, dt=1.0ms, NLOS=25, Tp_file=12, Tf_file=16)
+Tp=20 k=2 (2ms) windows: train=21390 val=6900 test=7820  load 1.7s  out=./runs/v9b_Tp20_bscaI_k2ms
+optim: Adam(lr=0.0001, beta1=0.9) sched=cosine ema=0.999 grad_clip=1.0
+G=BeamAlignedUNet params=7,042,346  loss=MSE  phase_aug=True
+Epoch 1/100  Train -23.98dB  Val -30.70dB (smoothed -30.70)  lr 1.0e-04  126s  *best
+Epoch 2/100  Train -30.37dB  Val -32.12dB (smoothed -31.41)  lr 1.0e-04  123s  *best
+Epoch 3/100  Train -31.06dB  Val -32.57dB (smoothed -31.80)  lr 1.0e-04  123s  *best

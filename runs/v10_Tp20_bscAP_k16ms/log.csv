@@ -1,0 +1,3 @@
+epoch,train_nmse_db,val_nmse_db,val_smoothed_db
+1,-19.0826,-18.5736,-18.5736
+2,-19.7477,-18.6047,-18.5891

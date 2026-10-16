@@ -1,0 +1,7 @@
+train: E=186  v9b 점프 감지 0건, 다중 subcarrier 급변 0건 | 메타(고각·LOS/NLOS) v9와 동일: True | v9(A보정) vs v9b 상대오차 중앙값 0.0e+00, 최대 3.5e-05, 1% 초과 에피소드 0개
+val  : E=60  v9b 점프 감지 0건, 다중 subcarrier 급변 0건 | 메타(고각·LOS/NLOS) v9와 동일: True | v9(A보정) vs v9b 상대오차 중앙값 0.0e+00, 최대 9.4e-01, 1% 초과 에피소드 1개
+      episode_00004.mat (NLOS, elev 32.4): 상대오차 0.941
+test : E=68  v9b 점프 감지 0건, 다중 subcarrier 급변 0건 | 메타(고각·LOS/NLOS) v9와 동일: True | v9(A보정) vs v9b 상대오차 중앙값 0.0e+00, 최대 9.2e-01, 1% 초과 에피소드 1개
+      episode_00068.mat (NLOS, elev 12.5): 상대오차 0.922
+guard: E=86  v9b 점프 감지 0건, 다중 subcarrier 급변 0건 | 메타(고각·LOS/NLOS) v9와 동일: True | v9(A보정) vs v9b 상대오차 중앙값 0.0e+00, 최대 3.3e-05, 1% 초과 에피소드 0개
+검증 결과: 통과 (v9b에 점프 없음)

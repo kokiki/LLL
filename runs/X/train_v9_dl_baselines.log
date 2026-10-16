@@ -1,0 +1,858 @@
+[device] cuda
+train: Split(E=186, n_sc=12, T=150, dt=1.0ms, NLOS=27, Tp_file=12, Tf_file=16)
+val  : Split(E=60, n_sc=12, T=150, dt=1.0ms, NLOS=16, Tp_file=12, Tf_file=16)
+test : Split(E=68, n_sc=12, T=150, dt=1.0ms, NLOS=25, Tp_file=12, Tf_file=16)
+
+===== lstm  horizon=1.0ms  (Tp=20) =====
+[lstm        k=   1ms] epoch   1/100  train_mse=0.01623  val_NMSE= -21.158 dB  (   16s)  * best
+[lstm        k=   1ms] epoch   2/100  train_mse=0.00117  val_NMSE= -20.348 dB  (   34s)
+[lstm        k=   1ms] epoch   3/100  train_mse=0.00090  val_NMSE= -23.397 dB  (   52s)  * best
+[lstm        k=   1ms] epoch   4/100  train_mse=0.00084  val_NMSE= -20.685 dB  (   70s)
+[lstm        k=   1ms] epoch   5/100  train_mse=0.00089  val_NMSE= -23.859 dB  (   89s)  * best
+[lstm        k=   1ms] epoch   6/100  train_mse=0.00070  val_NMSE= -23.830 dB  (  107s)
+[lstm        k=   1ms] epoch   7/100  train_mse=0.00073  val_NMSE= -23.129 dB  (  126s)
+[lstm        k=   1ms] epoch   8/100  train_mse=0.00063  val_NMSE= -23.897 dB  (  144s)  * best
+[lstm        k=   1ms] epoch   9/100  train_mse=0.00061  val_NMSE= -22.852 dB  (  163s)
+[lstm        k=   1ms] epoch  10/100  train_mse=0.00059  val_NMSE= -23.359 dB  (  182s)
+[lstm        k=   1ms] epoch  11/100  train_mse=0.00058  val_NMSE= -22.120 dB  (  201s)
+[lstm        k=   1ms] epoch  12/100  train_mse=0.00053  val_NMSE= -22.809 dB  (  220s)
+[lstm        k=   1ms] epoch  13/100  train_mse=0.00050  val_NMSE= -23.436 dB  (  238s)
+[lstm        k=   1ms] epoch  14/100  train_mse=0.00049  val_NMSE= -23.300 dB  (  257s)
+[lstm        k=   1ms] epoch  15/100  train_mse=0.00050  val_NMSE= -22.592 dB  (  276s)
+[lstm        k=   1ms] epoch  16/100  train_mse=0.00050  val_NMSE= -21.686 dB  (  295s)
+[lstm        k=   1ms] epoch  17/100  train_mse=0.00025  val_NMSE= -23.582 dB  (  314s)
+[lstm        k=   1ms] epoch  18/100  train_mse=0.00026  val_NMSE= -22.957 dB  (  333s)
+[lstm        k=   1ms] epoch  19/100  train_mse=0.00028  val_NMSE= -23.427 dB  (  352s)
+[lstm        k=   1ms] epoch  20/100  train_mse=0.00028  val_NMSE= -22.375 dB  (  371s)
+[lstm        k=   1ms] epoch  21/100  train_mse=0.00028  val_NMSE= -23.153 dB  (  389s)
+[lstm        k=   1ms] epoch  22/100  train_mse=0.00027  val_NMSE= -22.997 dB  (  408s)
+[lstm        k=   1ms] epoch  23/100  train_mse=0.00028  val_NMSE= -23.062 dB  (  427s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstm k=1.0ms  val_NMSE=-23.897dB  test_NMSE=-11.047dB  params=1,381,376
+  checkpoint saved: runs\v9_dl_baselines\lstm_k1ms_tp20.pt
+
+===== lstm  horizon=2.0ms  (Tp=20) =====
+[lstm        k=   2ms] epoch   1/100  train_mse=0.01644  val_NMSE= -20.695 dB  (   19s)  * best
+[lstm        k=   2ms] epoch   2/100  train_mse=0.00132  val_NMSE= -20.836 dB  (   38s)  * best
+[lstm        k=   2ms] epoch   3/100  train_mse=0.00106  val_NMSE= -22.608 dB  (   57s)  * best
+[lstm        k=   2ms] epoch   4/100  train_mse=0.00100  val_NMSE= -20.424 dB  (   76s)
+[lstm        k=   2ms] epoch   5/100  train_mse=0.00099  val_NMSE= -23.098 dB  (   95s)  * best
+[lstm        k=   2ms] epoch   6/100  train_mse=0.00083  val_NMSE= -22.915 dB  (  114s)
+[lstm        k=   2ms] epoch   7/100  train_mse=0.00084  val_NMSE= -22.447 dB  (  133s)
+[lstm        k=   2ms] epoch   8/100  train_mse=0.00074  val_NMSE= -21.240 dB  (  152s)
+[lstm        k=   2ms] epoch   9/100  train_mse=0.00079  val_NMSE= -22.953 dB  (  171s)
+[lstm        k=   2ms] epoch  10/100  train_mse=0.00069  val_NMSE= -23.170 dB  (  190s)  * best
+[lstm        k=   2ms] epoch  11/100  train_mse=0.00069  val_NMSE= -22.051 dB  (  208s)
+[lstm        k=   2ms] epoch  12/100  train_mse=0.00064  val_NMSE= -22.745 dB  (  228s)
+[lstm        k=   2ms] epoch  13/100  train_mse=0.00061  val_NMSE= -23.047 dB  (  247s)
+[lstm        k=   2ms] epoch  14/100  train_mse=0.00063  val_NMSE= -22.052 dB  (  265s)
+[lstm        k=   2ms] epoch  15/100  train_mse=0.00065  val_NMSE= -22.098 dB  (  284s)
+[lstm        k=   2ms] epoch  16/100  train_mse=0.00058  val_NMSE= -18.444 dB  (  303s)
+[lstm        k=   2ms] epoch  17/100  train_mse=0.00058  val_NMSE= -21.907 dB  (  322s)
+[lstm        k=   2ms] epoch  18/100  train_mse=0.00054  val_NMSE= -21.759 dB  (  341s)
+[lstm        k=   2ms] epoch  19/100  train_mse=0.00035  val_NMSE= -22.602 dB  (  360s)
+[lstm        k=   2ms] epoch  20/100  train_mse=0.00036  val_NMSE= -21.944 dB  (  379s)
+[lstm        k=   2ms] epoch  21/100  train_mse=0.00037  val_NMSE= -22.100 dB  (  398s)
+[lstm        k=   2ms] epoch  22/100  train_mse=0.00037  val_NMSE= -22.395 dB  (  417s)
+[lstm        k=   2ms] epoch  23/100  train_mse=0.00037  val_NMSE= -22.235 dB  (  436s)
+[lstm        k=   2ms] epoch  24/100  train_mse=0.00036  val_NMSE= -21.643 dB  (  455s)
+[lstm        k=   2ms] epoch  25/100  train_mse=0.00036  val_NMSE= -22.224 dB  (  474s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstm k=2.0ms  val_NMSE=-23.170dB  test_NMSE=-10.734dB  params=1,381,376
+  checkpoint saved: runs\v9_dl_baselines\lstm_k2ms_tp20.pt
+
+===== lstm  horizon=4.0ms  (Tp=20) =====
+[lstm        k=   4ms] epoch   1/100  train_mse=0.01681  val_NMSE= -19.890 dB  (   19s)  * best
+[lstm        k=   4ms] epoch   2/100  train_mse=0.00165  val_NMSE= -20.313 dB  (   38s)  * best
+[lstm        k=   4ms] epoch   3/100  train_mse=0.00136  val_NMSE= -20.665 dB  (   57s)  * best
+[lstm        k=   4ms] epoch   4/100  train_mse=0.00124  val_NMSE= -20.536 dB  (   76s)
+[lstm        k=   4ms] epoch   5/100  train_mse=0.00127  val_NMSE= -21.923 dB  (   95s)  * best
+[lstm        k=   4ms] epoch   6/100  train_mse=0.00107  val_NMSE= -21.799 dB  (  114s)
+[lstm        k=   4ms] epoch   7/100  train_mse=0.00112  val_NMSE= -21.448 dB  (  133s)
+[lstm        k=   4ms] epoch   8/100  train_mse=0.00098  val_NMSE= -20.668 dB  (  152s)
+[lstm        k=   4ms] epoch   9/100  train_mse=0.00102  val_NMSE= -22.026 dB  (  171s)  * best
+[lstm        k=   4ms] epoch  10/100  train_mse=0.00092  val_NMSE= -20.958 dB  (  189s)
+[lstm        k=   4ms] epoch  11/100  train_mse=0.00095  val_NMSE= -20.800 dB  (  208s)
+[lstm        k=   4ms] epoch  12/100  train_mse=0.00087  val_NMSE= -19.688 dB  (  228s)
+[lstm        k=   4ms] epoch  13/100  train_mse=0.00088  val_NMSE= -21.062 dB  (  246s)
+[lstm        k=   4ms] epoch  14/100  train_mse=0.00084  val_NMSE= -20.699 dB  (  265s)
+[lstm        k=   4ms] epoch  15/100  train_mse=0.00083  val_NMSE= -21.176 dB  (  284s)
+[lstm        k=   4ms] epoch  16/100  train_mse=0.00081  val_NMSE= -18.787 dB  (  303s)
+[lstm        k=   4ms] epoch  17/100  train_mse=0.00081  val_NMSE= -21.398 dB  (  322s)
+[lstm        k=   4ms] epoch  18/100  train_mse=0.00056  val_NMSE= -21.823 dB  (  341s)
+[lstm        k=   4ms] epoch  19/100  train_mse=0.00058  val_NMSE= -21.733 dB  (  360s)
+[lstm        k=   4ms] epoch  20/100  train_mse=0.00058  val_NMSE= -20.995 dB  (  379s)
+[lstm        k=   4ms] epoch  21/100  train_mse=0.00058  val_NMSE= -21.616 dB  (  398s)
+[lstm        k=   4ms] epoch  22/100  train_mse=0.00056  val_NMSE= -21.724 dB  (  417s)
+[lstm        k=   4ms] epoch  23/100  train_mse=0.00058  val_NMSE= -21.193 dB  (  436s)
+[lstm        k=   4ms] epoch  24/100  train_mse=0.00057  val_NMSE= -20.967 dB  (  455s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstm k=4.0ms  val_NMSE=-22.026dB  test_NMSE=-11.220dB  params=1,381,376
+  checkpoint saved: runs\v9_dl_baselines\lstm_k4ms_tp20.pt
+
+===== lstm  horizon=8.0ms  (Tp=20) =====
+[lstm        k=   8ms] epoch   1/100  train_mse=0.01781  val_NMSE= -17.835 dB  (   19s)  * best
+[lstm        k=   8ms] epoch   2/100  train_mse=0.00237  val_NMSE= -18.849 dB  (   38s)  * best
+[lstm        k=   8ms] epoch   3/100  train_mse=0.00202  val_NMSE= -19.249 dB  (   57s)  * best
+[lstm        k=   8ms] epoch   4/100  train_mse=0.00182  val_NMSE= -18.308 dB  (   76s)
+[lstm        k=   8ms] epoch   5/100  train_mse=0.00175  val_NMSE= -19.340 dB  (   95s)  * best
+[lstm        k=   8ms] epoch   6/100  train_mse=0.00163  val_NMSE= -19.282 dB  (  114s)
+[lstm        k=   8ms] epoch   7/100  train_mse=0.00163  val_NMSE= -19.351 dB  (  133s)  * best
+[lstm        k=   8ms] epoch   8/100  train_mse=0.00150  val_NMSE= -18.383 dB  (  152s)
+[lstm        k=   8ms] epoch   9/100  train_mse=0.00152  val_NMSE= -19.522 dB  (  171s)  * best
+[lstm        k=   8ms] epoch  10/100  train_mse=0.00142  val_NMSE= -19.390 dB  (  190s)
+[lstm        k=   8ms] epoch  11/100  train_mse=0.00147  val_NMSE= -19.112 dB  (  209s)
+[lstm        k=   8ms] epoch  12/100  train_mse=0.00139  val_NMSE= -18.932 dB  (  228s)
+[lstm        k=   8ms] epoch  13/100  train_mse=0.00130  val_NMSE= -19.067 dB  (  247s)
+[lstm        k=   8ms] epoch  14/100  train_mse=0.00133  val_NMSE= -19.484 dB  (  266s)
+[lstm        k=   8ms] epoch  15/100  train_mse=0.00132  val_NMSE= -19.616 dB  (  285s)  * best
+[lstm        k=   8ms] epoch  16/100  train_mse=0.00127  val_NMSE= -17.433 dB  (  303s)
+[lstm        k=   8ms] epoch  17/100  train_mse=0.00128  val_NMSE= -19.634 dB  (  322s)  * best
+[lstm        k=   8ms] epoch  18/100  train_mse=0.00125  val_NMSE= -19.184 dB  (  342s)
+[lstm        k=   8ms] epoch  19/100  train_mse=0.00122  val_NMSE= -19.254 dB  (  361s)
+[lstm        k=   8ms] epoch  20/100  train_mse=0.00122  val_NMSE= -18.228 dB  (  379s)
+[lstm        k=   8ms] epoch  21/100  train_mse=0.00119  val_NMSE= -19.078 dB  (  398s)
+[lstm        k=   8ms] epoch  22/100  train_mse=0.00119  val_NMSE= -18.838 dB  (  417s)
+[lstm        k=   8ms] epoch  23/100  train_mse=0.00116  val_NMSE= -18.508 dB  (  437s)
+[lstm        k=   8ms] epoch  24/100  train_mse=0.00114  val_NMSE= -18.283 dB  (  456s)
+[lstm        k=   8ms] epoch  25/100  train_mse=0.00115  val_NMSE= -19.058 dB  (  475s)
+[lstm        k=   8ms] epoch  26/100  train_mse=0.00094  val_NMSE= -19.201 dB  (  493s)
+[lstm        k=   8ms] epoch  27/100  train_mse=0.00094  val_NMSE= -18.771 dB  (  512s)
+[lstm        k=   8ms] epoch  28/100  train_mse=0.00095  val_NMSE= -19.183 dB  (  532s)
+[lstm        k=   8ms] epoch  29/100  train_mse=0.00093  val_NMSE= -18.711 dB  (  550s)
+[lstm        k=   8ms] epoch  30/100  train_mse=0.00094  val_NMSE= -19.141 dB  (  569s)
+[lstm        k=   8ms] epoch  31/100  train_mse=0.00094  val_NMSE= -18.685 dB  (  588s)
+[lstm        k=   8ms] epoch  32/100  train_mse=0.00093  val_NMSE= -18.866 dB  (  607s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstm k=8.0ms  val_NMSE=-19.634dB  test_NMSE=-9.408dB  params=1,381,376
+  checkpoint saved: runs\v9_dl_baselines\lstm_k8ms_tp20.pt
+
+===== lstm  horizon=12.0ms  (Tp=20) =====
+[lstm        k=  12ms] epoch   1/100  train_mse=0.01854  val_NMSE= -16.070 dB  (   19s)  * best
+[lstm        k=  12ms] epoch   2/100  train_mse=0.00327  val_NMSE= -17.526 dB  (   38s)  * best
+[lstm        k=  12ms] epoch   3/100  train_mse=0.00273  val_NMSE= -18.041 dB  (   57s)  * best
+[lstm        k=  12ms] epoch   4/100  train_mse=0.00244  val_NMSE= -17.439 dB  (   76s)
+[lstm        k=  12ms] epoch   5/100  train_mse=0.00237  val_NMSE= -18.101 dB  (   94s)  * best
+[lstm        k=  12ms] epoch   6/100  train_mse=0.00223  val_NMSE= -17.876 dB  (  114s)
+[lstm        k=  12ms] epoch   7/100  train_mse=0.00217  val_NMSE= -18.434 dB  (  133s)  * best
+[lstm        k=  12ms] epoch   8/100  train_mse=0.00207  val_NMSE= -17.373 dB  (  152s)
+[lstm        k=  12ms] epoch   9/100  train_mse=0.00205  val_NMSE= -17.637 dB  (  171s)
+[lstm        k=  12ms] epoch  10/100  train_mse=0.00201  val_NMSE= -18.234 dB  (  189s)
+[lstm        k=  12ms] epoch  11/100  train_mse=0.00195  val_NMSE= -17.981 dB  (  209s)
+[lstm        k=  12ms] epoch  12/100  train_mse=0.00192  val_NMSE= -17.834 dB  (  228s)
+[lstm        k=  12ms] epoch  13/100  train_mse=0.00185  val_NMSE= -18.017 dB  (  246s)
+[lstm        k=  12ms] epoch  14/100  train_mse=0.00184  val_NMSE= -17.875 dB  (  265s)
+[lstm        k=  12ms] epoch  15/100  train_mse=0.00184  val_NMSE= -17.924 dB  (  284s)
+[lstm        k=  12ms] epoch  16/100  train_mse=0.00147  val_NMSE= -18.115 dB  (  303s)
+[lstm        k=  12ms] epoch  17/100  train_mse=0.00149  val_NMSE= -18.385 dB  (  322s)
+[lstm        k=  12ms] epoch  18/100  train_mse=0.00149  val_NMSE= -18.542 dB  (  341s)  * best
+[lstm        k=  12ms] epoch  19/100  train_mse=0.00147  val_NMSE= -18.401 dB  (  360s)
+[lstm        k=  12ms] epoch  20/100  train_mse=0.00148  val_NMSE= -18.282 dB  (  379s)
+[lstm        k=  12ms] epoch  21/100  train_mse=0.00147  val_NMSE= -18.076 dB  (  398s)
+[lstm        k=  12ms] epoch  22/100  train_mse=0.00146  val_NMSE= -18.123 dB  (  417s)
+[lstm        k=  12ms] epoch  23/100  train_mse=0.00143  val_NMSE= -17.377 dB  (  436s)
+[lstm        k=  12ms] epoch  24/100  train_mse=0.00145  val_NMSE= -18.085 dB  (  454s)
+[lstm        k=  12ms] epoch  25/100  train_mse=0.00145  val_NMSE= -18.218 dB  (  473s)
+[lstm        k=  12ms] epoch  26/100  train_mse=0.00145  val_NMSE= -18.045 dB  (  492s)
+[lstm        k=  12ms] epoch  27/100  train_mse=0.00130  val_NMSE= -17.927 dB  (  511s)
+[lstm        k=  12ms] epoch  28/100  train_mse=0.00130  val_NMSE= -18.223 dB  (  530s)
+[lstm        k=  12ms] epoch  29/100  train_mse=0.00129  val_NMSE= -17.990 dB  (  549s)
+[lstm        k=  12ms] epoch  30/100  train_mse=0.00130  val_NMSE= -18.190 dB  (  568s)
+[lstm        k=  12ms] epoch  31/100  train_mse=0.00130  val_NMSE= -18.050 dB  (  587s)
+[lstm        k=  12ms] epoch  32/100  train_mse=0.00129  val_NMSE= -17.786 dB  (  606s)
+[lstm        k=  12ms] epoch  33/100  train_mse=0.00128  val_NMSE= -18.160 dB  (  625s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstm k=12.0ms  val_NMSE=-18.542dB  test_NMSE=-9.500dB  params=1,381,376
+  checkpoint saved: runs\v9_dl_baselines\lstm_k12ms_tp20.pt
+
+===== lstm  horizon=16.0ms  (Tp=20) =====
+[lstm        k=  16ms] epoch   1/100  train_mse=0.02009  val_NMSE= -14.998 dB  (   19s)  * best
+[lstm        k=  16ms] epoch   2/100  train_mse=0.00425  val_NMSE= -16.518 dB  (   38s)  * best
+[lstm        k=  16ms] epoch   3/100  train_mse=0.00349  val_NMSE= -16.969 dB  (   57s)  * best
+[lstm        k=  16ms] epoch   4/100  train_mse=0.00306  val_NMSE= -16.476 dB  (   76s)
+[lstm        k=  16ms] epoch   5/100  train_mse=0.00301  val_NMSE= -17.145 dB  (   94s)  * best
+[lstm        k=  16ms] epoch   6/100  train_mse=0.00288  val_NMSE= -16.325 dB  (  113s)
+[lstm        k=  16ms] epoch   7/100  train_mse=0.00278  val_NMSE= -17.260 dB  (  132s)  * best
+[lstm        k=  16ms] epoch   8/100  train_mse=0.00267  val_NMSE= -16.465 dB  (  152s)
+[lstm        k=  16ms] epoch   9/100  train_mse=0.00266  val_NMSE= -16.761 dB  (  170s)
+[lstm        k=  16ms] epoch  10/100  train_mse=0.00261  val_NMSE= -16.909 dB  (  189s)
+[lstm        k=  16ms] epoch  11/100  train_mse=0.00254  val_NMSE= -16.444 dB  (  208s)
+[lstm        k=  16ms] epoch  12/100  train_mse=0.00247  val_NMSE= -16.635 dB  (  227s)
+[lstm        k=  16ms] epoch  13/100  train_mse=0.00243  val_NMSE= -16.817 dB  (  246s)
+[lstm        k=  16ms] epoch  14/100  train_mse=0.00241  val_NMSE= -16.781 dB  (  265s)
+[lstm        k=  16ms] epoch  15/100  train_mse=0.00238  val_NMSE= -16.420 dB  (  284s)
+[lstm        k=  16ms] epoch  16/100  train_mse=0.00196  val_NMSE= -16.652 dB  (  303s)
+[lstm        k=  16ms] epoch  17/100  train_mse=0.00199  val_NMSE= -16.826 dB  (  322s)
+[lstm        k=  16ms] epoch  18/100  train_mse=0.00198  val_NMSE= -16.843 dB  (  341s)
+[lstm        k=  16ms] epoch  19/100  train_mse=0.00196  val_NMSE= -16.592 dB  (  360s)
+[lstm        k=  16ms] epoch  20/100  train_mse=0.00197  val_NMSE= -16.550 dB  (  379s)
+[lstm        k=  16ms] epoch  21/100  train_mse=0.00196  val_NMSE= -16.218 dB  (  397s)
+[lstm        k=  16ms] epoch  22/100  train_mse=0.00194  val_NMSE= -16.392 dB  (  416s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstm k=16.0ms  val_NMSE=-17.260dB  test_NMSE=-10.290dB  params=1,381,376
+  checkpoint saved: runs\v9_dl_baselines\lstm_k16ms_tp20.pt
+
+===== gru  horizon=1.0ms  (Tp=20) =====
+[gru         k=   1ms] epoch   1/100  train_mse=0.01149  val_NMSE= -20.537 dB  (   18s)  * best
+[gru         k=   1ms] epoch   2/100  train_mse=0.00134  val_NMSE= -21.921 dB  (   36s)  * best
+[gru         k=   1ms] epoch   3/100  train_mse=0.00106  val_NMSE= -23.482 dB  (   53s)  * best
+[gru         k=   1ms] epoch   4/100  train_mse=0.00096  val_NMSE= -22.102 dB  (   71s)
+[gru         k=   1ms] epoch   5/100  train_mse=0.00102  val_NMSE= -23.940 dB  (   89s)  * best
+[gru         k=   1ms] epoch   6/100  train_mse=0.00087  val_NMSE= -24.568 dB  (  107s)  * best
+[gru         k=   1ms] epoch   7/100  train_mse=0.00087  val_NMSE= -23.974 dB  (  125s)
+[gru         k=   1ms] epoch   8/100  train_mse=0.00073  val_NMSE= -23.165 dB  (  142s)
+[gru         k=   1ms] epoch   9/100  train_mse=0.00077  val_NMSE= -23.893 dB  (  160s)
+[gru         k=   1ms] epoch  10/100  train_mse=0.00073  val_NMSE= -24.182 dB  (  178s)
+[gru         k=   1ms] epoch  11/100  train_mse=0.00069  val_NMSE= -22.593 dB  (  196s)
+[gru         k=   1ms] epoch  12/100  train_mse=0.00062  val_NMSE= -23.721 dB  (  214s)
+[gru         k=   1ms] epoch  13/100  train_mse=0.00056  val_NMSE= -23.962 dB  (  231s)
+[gru         k=   1ms] epoch  14/100  train_mse=0.00058  val_NMSE= -23.606 dB  (  249s)
+[gru         k=   1ms] epoch  15/100  train_mse=0.00030  val_NMSE= -25.400 dB  (  267s)  * best
+[gru         k=   1ms] epoch  16/100  train_mse=0.00034  val_NMSE= -25.322 dB  (  285s)
+[gru         k=   1ms] epoch  17/100  train_mse=0.00031  val_NMSE= -24.766 dB  (  303s)
+[gru         k=   1ms] epoch  18/100  train_mse=0.00032  val_NMSE= -24.274 dB  (  320s)
+[gru         k=   1ms] epoch  19/100  train_mse=0.00034  val_NMSE= -25.690 dB  (  338s)  * best
+[gru         k=   1ms] epoch  20/100  train_mse=0.00033  val_NMSE= -24.549 dB  (  356s)
+[gru         k=   1ms] epoch  21/100  train_mse=0.00033  val_NMSE= -25.224 dB  (  374s)
+[gru         k=   1ms] epoch  22/100  train_mse=0.00030  val_NMSE= -25.348 dB  (  391s)
+[gru         k=   1ms] epoch  23/100  train_mse=0.00032  val_NMSE= -25.418 dB  (  409s)
+[gru         k=   1ms] epoch  24/100  train_mse=0.00031  val_NMSE= -24.549 dB  (  427s)
+[gru         k=   1ms] epoch  25/100  train_mse=0.00029  val_NMSE= -24.869 dB  (  445s)
+[gru         k=   1ms] epoch  26/100  train_mse=0.00031  val_NMSE= -25.289 dB  (  463s)
+[gru         k=   1ms] epoch  27/100  train_mse=0.00029  val_NMSE= -25.330 dB  (  480s)
+[gru         k=   1ms] epoch  28/100  train_mse=0.00021  val_NMSE= -25.461 dB  (  498s)
+[gru         k=   1ms] epoch  29/100  train_mse=0.00021  val_NMSE= -25.570 dB  (  516s)
+[gru         k=   1ms] epoch  30/100  train_mse=0.00022  val_NMSE= -25.916 dB  (  534s)  * best
+[gru         k=   1ms] epoch  31/100  train_mse=0.00022  val_NMSE= -25.371 dB  (  552s)
+[gru         k=   1ms] epoch  32/100  train_mse=0.00022  val_NMSE= -25.735 dB  (  570s)
+[gru         k=   1ms] epoch  33/100  train_mse=0.00021  val_NMSE= -25.586 dB  (  587s)
+[gru         k=   1ms] epoch  34/100  train_mse=0.00021  val_NMSE= -25.625 dB  (  605s)
+[gru         k=   1ms] epoch  35/100  train_mse=0.00021  val_NMSE= -25.558 dB  (  623s)
+[gru         k=   1ms] epoch  36/100  train_mse=0.00022  val_NMSE= -25.821 dB  (  641s)
+[gru         k=   1ms] epoch  37/100  train_mse=0.00021  val_NMSE= -25.800 dB  (  658s)
+[gru         k=   1ms] epoch  38/100  train_mse=0.00021  val_NMSE= -25.689 dB  (  676s)
+[gru         k=   1ms] epoch  39/100  train_mse=0.00018  val_NMSE= -25.679 dB  (  694s)
+[gru         k=   1ms] epoch  40/100  train_mse=0.00018  val_NMSE= -25.295 dB  (  712s)
+[gru         k=   1ms] epoch  41/100  train_mse=0.00018  val_NMSE= -25.610 dB  (  729s)
+[gru         k=   1ms] epoch  42/100  train_mse=0.00018  val_NMSE= -25.719 dB  (  747s)
+[gru         k=   1ms] epoch  43/100  train_mse=0.00018  val_NMSE= -25.665 dB  (  765s)
+[gru         k=   1ms] epoch  44/100  train_mse=0.00018  val_NMSE= -25.723 dB  (  782s)
+[gru         k=   1ms] epoch  45/100  train_mse=0.00018  val_NMSE= -25.581 dB  (  800s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> gru k=1.0ms  val_NMSE=-25.916dB  test_NMSE=-12.170dB  params=1,118,208
+  checkpoint saved: runs\v9_dl_baselines\gru_k1ms_tp20.pt
+
+===== gru  horizon=2.0ms  (Tp=20) =====
+[gru         k=   2ms] epoch   1/100  train_mse=0.01164  val_NMSE= -20.405 dB  (   18s)  * best
+[gru         k=   2ms] epoch   2/100  train_mse=0.00149  val_NMSE= -21.372 dB  (   36s)  * best
+[gru         k=   2ms] epoch   3/100  train_mse=0.00121  val_NMSE= -22.371 dB  (   53s)  * best
+[gru         k=   2ms] epoch   4/100  train_mse=0.00115  val_NMSE= -21.510 dB  (   71s)
+[gru         k=   2ms] epoch   5/100  train_mse=0.00120  val_NMSE= -22.666 dB  (   89s)  * best
+[gru         k=   2ms] epoch   6/100  train_mse=0.00098  val_NMSE= -23.893 dB  (  107s)  * best
+[gru         k=   2ms] epoch   7/100  train_mse=0.00096  val_NMSE= -22.912 dB  (  125s)
+[gru         k=   2ms] epoch   8/100  train_mse=0.00086  val_NMSE= -20.490 dB  (  142s)
+[gru         k=   2ms] epoch   9/100  train_mse=0.00092  val_NMSE= -23.320 dB  (  160s)
+[gru         k=   2ms] epoch  10/100  train_mse=0.00086  val_NMSE= -23.471 dB  (  178s)
+[gru         k=   2ms] epoch  11/100  train_mse=0.00081  val_NMSE= -22.764 dB  (  195s)
+[gru         k=   2ms] epoch  12/100  train_mse=0.00073  val_NMSE= -23.233 dB  (  213s)
+[gru         k=   2ms] epoch  13/100  train_mse=0.00068  val_NMSE= -23.445 dB  (  231s)
+[gru         k=   2ms] epoch  14/100  train_mse=0.00072  val_NMSE= -21.854 dB  (  249s)
+[gru         k=   2ms] epoch  15/100  train_mse=0.00041  val_NMSE= -24.767 dB  (  266s)  * best
+[gru         k=   2ms] epoch  16/100  train_mse=0.00045  val_NMSE= -21.537 dB  (  284s)
+[gru         k=   2ms] epoch  17/100  train_mse=0.00044  val_NMSE= -24.648 dB  (  302s)
+[gru         k=   2ms] epoch  18/100  train_mse=0.00043  val_NMSE= -24.129 dB  (  320s)
+[gru         k=   2ms] epoch  19/100  train_mse=0.00044  val_NMSE= -24.787 dB  (  338s)  * best
+[gru         k=   2ms] epoch  20/100  train_mse=0.00044  val_NMSE= -23.905 dB  (  355s)
+[gru         k=   2ms] epoch  21/100  train_mse=0.00041  val_NMSE= -24.620 dB  (  373s)
+[gru         k=   2ms] epoch  22/100  train_mse=0.00040  val_NMSE= -24.822 dB  (  391s)  * best
+[gru         k=   2ms] epoch  23/100  train_mse=0.00043  val_NMSE= -24.914 dB  (  409s)  * best
+[gru         k=   2ms] epoch  24/100  train_mse=0.00042  val_NMSE= -24.404 dB  (  426s)
+[gru         k=   2ms] epoch  25/100  train_mse=0.00040  val_NMSE= -24.351 dB  (  444s)
+[gru         k=   2ms] epoch  26/100  train_mse=0.00042  val_NMSE= -24.619 dB  (  462s)
+[gru         k=   2ms] epoch  27/100  train_mse=0.00039  val_NMSE= -24.267 dB  (  480s)
+[gru         k=   2ms] epoch  28/100  train_mse=0.00042  val_NMSE= -24.210 dB  (  498s)
+[gru         k=   2ms] epoch  29/100  train_mse=0.00038  val_NMSE= -24.434 dB  (  515s)
+[gru         k=   2ms] epoch  30/100  train_mse=0.00040  val_NMSE= -24.957 dB  (  533s)  * best
+[gru         k=   2ms] epoch  31/100  train_mse=0.00040  val_NMSE= -24.381 dB  (  551s)
+[gru         k=   2ms] epoch  32/100  train_mse=0.00039  val_NMSE= -24.538 dB  (  569s)
+[gru         k=   2ms] epoch  33/100  train_mse=0.00038  val_NMSE= -24.294 dB  (  586s)
+[gru         k=   2ms] epoch  34/100  train_mse=0.00038  val_NMSE= -24.358 dB  (  604s)
+[gru         k=   2ms] epoch  35/100  train_mse=0.00038  val_NMSE= -24.573 dB  (  622s)
+[gru         k=   2ms] epoch  36/100  train_mse=0.00038  val_NMSE= -24.774 dB  (  639s)
+[gru         k=   2ms] epoch  37/100  train_mse=0.00039  val_NMSE= -24.449 dB  (  657s)
+[gru         k=   2ms] epoch  38/100  train_mse=0.00037  val_NMSE= -24.758 dB  (  675s)
+[gru         k=   2ms] epoch  39/100  train_mse=0.00029  val_NMSE= -24.551 dB  (  693s)
+[gru         k=   2ms] epoch  40/100  train_mse=0.00029  val_NMSE= -24.676 dB  (  710s)
+[gru         k=   2ms] epoch  41/100  train_mse=0.00029  val_NMSE= -24.665 dB  (  728s)
+[gru         k=   2ms] epoch  42/100  train_mse=0.00030  val_NMSE= -24.762 dB  (  746s)
+[gru         k=   2ms] epoch  43/100  train_mse=0.00029  val_NMSE= -24.730 dB  (  763s)
+[gru         k=   2ms] epoch  44/100  train_mse=0.00029  val_NMSE= -24.916 dB  (  781s)
+[gru         k=   2ms] epoch  45/100  train_mse=0.00029  val_NMSE= -24.790 dB  (  799s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> gru k=2.0ms  val_NMSE=-24.957dB  test_NMSE=-12.503dB  params=1,118,208
+  checkpoint saved: runs\v9_dl_baselines\gru_k2ms_tp20.pt
+
+===== gru  horizon=4.0ms  (Tp=20) =====
+[gru         k=   4ms] epoch   1/100  train_mse=0.01196  val_NMSE= -19.800 dB  (   18s)  * best
+[gru         k=   4ms] epoch   2/100  train_mse=0.00181  val_NMSE= -21.066 dB  (   36s)  * best
+[gru         k=   4ms] epoch   3/100  train_mse=0.00154  val_NMSE= -21.304 dB  (   53s)  * best
+[gru         k=   4ms] epoch   4/100  train_mse=0.00140  val_NMSE= -20.729 dB  (   71s)
+[gru         k=   4ms] epoch   5/100  train_mse=0.00145  val_NMSE= -21.614 dB  (   89s)  * best
+[gru         k=   4ms] epoch   6/100  train_mse=0.00119  val_NMSE= -22.174 dB  (  106s)  * best
+[gru         k=   4ms] epoch   7/100  train_mse=0.00125  val_NMSE= -21.668 dB  (  124s)
+[gru         k=   4ms] epoch   8/100  train_mse=0.00107  val_NMSE= -20.357 dB  (  142s)
+[gru         k=   4ms] epoch   9/100  train_mse=0.00114  val_NMSE= -22.539 dB  (  160s)  * best
+[gru         k=   4ms] epoch  10/100  train_mse=0.00109  val_NMSE= -21.199 dB  (  177s)
+[gru         k=   4ms] epoch  11/100  train_mse=0.00107  val_NMSE= -20.764 dB  (  195s)
+[gru         k=   4ms] epoch  12/100  train_mse=0.00094  val_NMSE= -19.969 dB  (  213s)
+[gru         k=   4ms] epoch  13/100  train_mse=0.00096  val_NMSE= -22.338 dB  (  230s)
+[gru         k=   4ms] epoch  14/100  train_mse=0.00094  val_NMSE= -21.306 dB  (  248s)
+[gru         k=   4ms] epoch  15/100  train_mse=0.00092  val_NMSE= -22.667 dB  (  266s)  * best
+[gru         k=   4ms] epoch  16/100  train_mse=0.00089  val_NMSE= -20.080 dB  (  283s)
+[gru         k=   4ms] epoch  17/100  train_mse=0.00087  val_NMSE= -21.989 dB  (  301s)
+[gru         k=   4ms] epoch  18/100  train_mse=0.00085  val_NMSE= -22.034 dB  (  319s)
+[gru         k=   4ms] epoch  19/100  train_mse=0.00086  val_NMSE= -22.089 dB  (  336s)
+[gru         k=   4ms] epoch  20/100  train_mse=0.00081  val_NMSE= -21.009 dB  (  354s)
+[gru         k=   4ms] epoch  21/100  train_mse=0.00080  val_NMSE= -22.261 dB  (  372s)
+[gru         k=   4ms] epoch  22/100  train_mse=0.00077  val_NMSE= -22.179 dB  (  389s)
+[gru         k=   4ms] epoch  23/100  train_mse=0.00079  val_NMSE= -21.082 dB  (  407s)
+[gru         k=   4ms] epoch  24/100  train_mse=0.00054  val_NMSE= -22.285 dB  (  425s)
+[gru         k=   4ms] epoch  25/100  train_mse=0.00055  val_NMSE= -22.387 dB  (  442s)
+[gru         k=   4ms] epoch  26/100  train_mse=0.00057  val_NMSE= -22.327 dB  (  460s)
+[gru         k=   4ms] epoch  27/100  train_mse=0.00056  val_NMSE= -22.481 dB  (  478s)
+[gru         k=   4ms] epoch  28/100  train_mse=0.00057  val_NMSE= -22.421 dB  (  495s)
+[gru         k=   4ms] epoch  29/100  train_mse=0.00055  val_NMSE= -22.218 dB  (  513s)
+[gru         k=   4ms] epoch  30/100  train_mse=0.00056  val_NMSE= -22.673 dB  (  531s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> gru k=4.0ms  val_NMSE=-22.667dB  test_NMSE=-12.500dB  params=1,118,208
+  checkpoint saved: runs\v9_dl_baselines\gru_k4ms_tp20.pt
+
+===== gru  horizon=8.0ms  (Tp=20) =====
+[gru         k=   8ms] epoch   1/100  train_mse=0.01294  val_NMSE= -17.788 dB  (   18s)  * best
+[gru         k=   8ms] epoch   2/100  train_mse=0.00262  val_NMSE= -18.924 dB  (   35s)  * best
+[gru         k=   8ms] epoch   3/100  train_mse=0.00227  val_NMSE= -19.730 dB  (   53s)  * best
+[gru         k=   8ms] epoch   4/100  train_mse=0.00194  val_NMSE= -19.750 dB  (   71s)  * best
+[gru         k=   8ms] epoch   5/100  train_mse=0.00195  val_NMSE= -20.050 dB  (   88s)  * best
+[gru         k=   8ms] epoch   6/100  train_mse=0.00174  val_NMSE= -20.107 dB  (  106s)  * best
+[gru         k=   8ms] epoch   7/100  train_mse=0.00176  val_NMSE= -19.592 dB  (  124s)
+[gru         k=   8ms] epoch   8/100  train_mse=0.00164  val_NMSE= -19.066 dB  (  142s)
+[gru         k=   8ms] epoch   9/100  train_mse=0.00165  val_NMSE= -20.443 dB  (  159s)  * best
+[gru         k=   8ms] epoch  10/100  train_mse=0.00153  val_NMSE= -19.822 dB  (  177s)
+[gru         k=   8ms] epoch  11/100  train_mse=0.00162  val_NMSE= -19.468 dB  (  195s)
+[gru         k=   8ms] epoch  12/100  train_mse=0.00147  val_NMSE= -19.950 dB  (  213s)
+[gru         k=   8ms] epoch  13/100  train_mse=0.00142  val_NMSE= -19.479 dB  (  230s)
+[gru         k=   8ms] epoch  14/100  train_mse=0.00143  val_NMSE= -19.717 dB  (  248s)
+[gru         k=   8ms] epoch  15/100  train_mse=0.00141  val_NMSE= -20.388 dB  (  266s)
+[gru         k=   8ms] epoch  16/100  train_mse=0.00136  val_NMSE= -18.473 dB  (  283s)
+[gru         k=   8ms] epoch  17/100  train_mse=0.00136  val_NMSE= -20.236 dB  (  301s)
+[gru         k=   8ms] epoch  18/100  train_mse=0.00101  val_NMSE= -20.692 dB  (  319s)  * best
+[gru         k=   8ms] epoch  19/100  train_mse=0.00101  val_NMSE= -20.609 dB  (  337s)
+[gru         k=   8ms] epoch  20/100  train_mse=0.00103  val_NMSE= -20.518 dB  (  354s)
+[gru         k=   8ms] epoch  21/100  train_mse=0.00103  val_NMSE= -20.606 dB  (  372s)
+[gru         k=   8ms] epoch  22/100  train_mse=0.00102  val_NMSE= -20.693 dB  (  390s)
+[gru         k=   8ms] epoch  23/100  train_mse=0.00100  val_NMSE= -20.444 dB  (  408s)
+[gru         k=   8ms] epoch  24/100  train_mse=0.00100  val_NMSE= -20.196 dB  (  425s)
+[gru         k=   8ms] epoch  25/100  train_mse=0.00100  val_NMSE= -20.459 dB  (  443s)
+[gru         k=   8ms] epoch  26/100  train_mse=0.00101  val_NMSE= -20.566 dB  (  461s)
+[gru         k=   8ms] epoch  27/100  train_mse=0.00098  val_NMSE= -20.439 dB  (  479s)
+[gru         k=   8ms] epoch  28/100  train_mse=0.00099  val_NMSE= -20.507 dB  (  496s)
+[gru         k=   8ms] epoch  29/100  train_mse=0.00097  val_NMSE= -20.308 dB  (  514s)
+[gru         k=   8ms] epoch  30/100  train_mse=0.00098  val_NMSE= -20.698 dB  (  532s)
+[gru         k=   8ms] epoch  31/100  train_mse=0.00099  val_NMSE= -19.781 dB  (  549s)
+[gru         k=   8ms] epoch  32/100  train_mse=0.00097  val_NMSE= -20.322 dB  (  567s)
+[gru         k=   8ms] epoch  33/100  train_mse=0.00095  val_NMSE= -20.603 dB  (  585s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> gru k=8.0ms  val_NMSE=-20.692dB  test_NMSE=-12.107dB  params=1,118,208
+  checkpoint saved: runs\v9_dl_baselines\gru_k8ms_tp20.pt
+
+===== gru  horizon=12.0ms  (Tp=20) =====
+[gru         k=  12ms] epoch   1/100  train_mse=0.01380  val_NMSE= -16.201 dB  (   18s)  * best
+[gru         k=  12ms] epoch   2/100  train_mse=0.00353  val_NMSE= -17.649 dB  (   35s)  * best
+[gru         k=  12ms] epoch   3/100  train_mse=0.00309  val_NMSE= -17.956 dB  (   53s)  * best
+[gru         k=  12ms] epoch   4/100  train_mse=0.00260  val_NMSE= -17.676 dB  (   70s)
+[gru         k=  12ms] epoch   5/100  train_mse=0.00258  val_NMSE= -18.619 dB  (   88s)  * best
+[gru         k=  12ms] epoch   6/100  train_mse=0.00231  val_NMSE= -18.502 dB  (  106s)
+[gru         k=  12ms] epoch   7/100  train_mse=0.00234  val_NMSE= -18.145 dB  (  124s)
+[gru         k=  12ms] epoch   8/100  train_mse=0.00219  val_NMSE= -17.157 dB  (  141s)
+[gru         k=  12ms] epoch   9/100  train_mse=0.00215  val_NMSE= -17.763 dB  (  159s)
+[gru         k=  12ms] epoch  10/100  train_mse=0.00210  val_NMSE= -18.465 dB  (  177s)
+[gru         k=  12ms] epoch  11/100  train_mse=0.00206  val_NMSE= -18.442 dB  (  195s)
+[gru         k=  12ms] epoch  12/100  train_mse=0.00206  val_NMSE= -18.589 dB  (  212s)
+[gru         k=  12ms] epoch  13/100  train_mse=0.00192  val_NMSE= -18.352 dB  (  230s)
+[gru         k=  12ms] epoch  14/100  train_mse=0.00151  val_NMSE= -19.155 dB  (  248s)  * best
+[gru         k=  12ms] epoch  15/100  train_mse=0.00153  val_NMSE= -18.874 dB  (  265s)
+[gru         k=  12ms] epoch  16/100  train_mse=0.00153  val_NMSE= -17.835 dB  (  283s)
+[gru         k=  12ms] epoch  17/100  train_mse=0.00154  val_NMSE= -19.015 dB  (  301s)
+[gru         k=  12ms] epoch  18/100  train_mse=0.00152  val_NMSE= -19.030 dB  (  318s)
+[gru         k=  12ms] epoch  19/100  train_mse=0.00150  val_NMSE= -19.010 dB  (  336s)
+[gru         k=  12ms] epoch  20/100  train_mse=0.00150  val_NMSE= -18.791 dB  (  354s)
+[gru         k=  12ms] epoch  21/100  train_mse=0.00150  val_NMSE= -18.864 dB  (  371s)
+[gru         k=  12ms] epoch  22/100  train_mse=0.00148  val_NMSE= -18.773 dB  (  389s)
+[gru         k=  12ms] epoch  23/100  train_mse=0.00128  val_NMSE= -18.504 dB  (  407s)
+[gru         k=  12ms] epoch  24/100  train_mse=0.00130  val_NMSE= -19.051 dB  (  424s)
+[gru         k=  12ms] epoch  25/100  train_mse=0.00131  val_NMSE= -18.895 dB  (  442s)
+[gru         k=  12ms] epoch  26/100  train_mse=0.00130  val_NMSE= -18.933 dB  (  460s)
+[gru         k=  12ms] epoch  27/100  train_mse=0.00129  val_NMSE= -18.839 dB  (  477s)
+[gru         k=  12ms] epoch  28/100  train_mse=0.00129  val_NMSE= -19.094 dB  (  495s)
+[gru         k=  12ms] epoch  29/100  train_mse=0.00128  val_NMSE= -18.740 dB  (  513s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> gru k=12.0ms  val_NMSE=-19.155dB  test_NMSE=-11.545dB  params=1,118,208
+  checkpoint saved: runs\v9_dl_baselines\gru_k12ms_tp20.pt
+
+===== gru  horizon=16.0ms  (Tp=20) =====
+[gru         k=  16ms] epoch   1/100  train_mse=0.01503  val_NMSE= -14.994 dB  (   18s)  * best
+[gru         k=  16ms] epoch   2/100  train_mse=0.00457  val_NMSE= -16.480 dB  (   35s)  * best
+[gru         k=  16ms] epoch   3/100  train_mse=0.00405  val_NMSE= -17.144 dB  (   53s)  * best
+[gru         k=  16ms] epoch   4/100  train_mse=0.00329  val_NMSE= -16.767 dB  (   71s)
+[gru         k=  16ms] epoch   5/100  train_mse=0.00317  val_NMSE= -17.427 dB  (   88s)  * best
+[gru         k=  16ms] epoch   6/100  train_mse=0.00298  val_NMSE= -17.111 dB  (  106s)
+[gru         k=  16ms] epoch   7/100  train_mse=0.00297  val_NMSE= -17.459 dB  (  124s)  * best
+[gru         k=  16ms] epoch   8/100  train_mse=0.00280  val_NMSE= -16.700 dB  (  141s)
+[gru         k=  16ms] epoch   9/100  train_mse=0.00274  val_NMSE= -16.868 dB  (  159s)
+[gru         k=  16ms] epoch  10/100  train_mse=0.00268  val_NMSE= -17.320 dB  (  177s)
+[gru         k=  16ms] epoch  11/100  train_mse=0.00266  val_NMSE= -17.245 dB  (  195s)
+[gru         k=  16ms] epoch  12/100  train_mse=0.00260  val_NMSE= -17.339 dB  (  213s)
+[gru         k=  16ms] epoch  13/100  train_mse=0.00249  val_NMSE= -17.363 dB  (  230s)
+[gru         k=  16ms] epoch  14/100  train_mse=0.00248  val_NMSE= -17.159 dB  (  248s)
+[gru         k=  16ms] epoch  15/100  train_mse=0.00249  val_NMSE= -16.970 dB  (  265s)
+[gru         k=  16ms] epoch  16/100  train_mse=0.00194  val_NMSE= -16.910 dB  (  283s)
+[gru         k=  16ms] epoch  17/100  train_mse=0.00198  val_NMSE= -17.364 dB  (  301s)
+[gru         k=  16ms] epoch  18/100  train_mse=0.00197  val_NMSE= -17.472 dB  (  319s)  * best
+[gru         k=  16ms] epoch  19/100  train_mse=0.00195  val_NMSE= -17.331 dB  (  336s)
+[gru         k=  16ms] epoch  20/100  train_mse=0.00196  val_NMSE= -17.372 dB  (  354s)
+[gru         k=  16ms] epoch  21/100  train_mse=0.00195  val_NMSE= -17.231 dB  (  372s)
+[gru         k=  16ms] epoch  22/100  train_mse=0.00194  val_NMSE= -17.187 dB  (  390s)
+[gru         k=  16ms] epoch  23/100  train_mse=0.00190  val_NMSE= -17.052 dB  (  407s)
+[gru         k=  16ms] epoch  24/100  train_mse=0.00191  val_NMSE= -17.249 dB  (  425s)
+[gru         k=  16ms] epoch  25/100  train_mse=0.00191  val_NMSE= -16.979 dB  (  443s)
+[gru         k=  16ms] epoch  26/100  train_mse=0.00190  val_NMSE= -17.187 dB  (  461s)
+[gru         k=  16ms] epoch  27/100  train_mse=0.00170  val_NMSE= -17.379 dB  (  478s)
+[gru         k=  16ms] epoch  28/100  train_mse=0.00169  val_NMSE= -17.465 dB  (  496s)
+[gru         k=  16ms] epoch  29/100  train_mse=0.00169  val_NMSE= -17.312 dB  (  514s)
+[gru         k=  16ms] epoch  30/100  train_mse=0.00168  val_NMSE= -17.202 dB  (  531s)
+[gru         k=  16ms] epoch  31/100  train_mse=0.00169  val_NMSE= -17.390 dB  (  549s)
+[gru         k=  16ms] epoch  32/100  train_mse=0.00167  val_NMSE= -17.113 dB  (  567s)
+[gru         k=  16ms] epoch  33/100  train_mse=0.00167  val_NMSE= -17.428 dB  (  585s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> gru k=16.0ms  val_NMSE=-17.472dB  test_NMSE=-9.796dB  params=1,118,208
+  checkpoint saved: runs\v9_dl_baselines\gru_k16ms_tp20.pt
+
+===== lstmcnn  horizon=1.0ms  (Tp=20) =====
+[lstmcnn     k=   1ms] epoch   1/100  train_mse=0.05070  val_NMSE= -20.152 dB  (   48s)  * best
+[lstmcnn     k=   1ms] epoch   2/100  train_mse=0.00134  val_NMSE= -21.196 dB  (   95s)  * best
+[lstmcnn     k=   1ms] epoch   3/100  train_mse=0.00114  val_NMSE= -22.784 dB  (  143s)  * best
+[lstmcnn     k=   1ms] epoch   4/100  train_mse=0.00112  val_NMSE= -21.345 dB  (  191s)
+[lstmcnn     k=   1ms] epoch   5/100  train_mse=0.00107  val_NMSE= -23.703 dB  (  238s)  * best
+[lstmcnn     k=   1ms] epoch   6/100  train_mse=0.00089  val_NMSE= -24.083 dB  (  286s)  * best
+[lstmcnn     k=   1ms] epoch   7/100  train_mse=0.00082  val_NMSE= -22.789 dB  (  334s)
+[lstmcnn     k=   1ms] epoch   8/100  train_mse=0.00167  val_NMSE= -20.544 dB  (  382s)
+[lstmcnn     k=   1ms] epoch   9/100  train_mse=0.00066  val_NMSE= -19.127 dB  (  429s)
+[lstmcnn     k=   1ms] epoch  10/100  train_mse=0.00069  val_NMSE= -18.139 dB  (  477s)
+[lstmcnn     k=   1ms] epoch  11/100  train_mse=0.00078  val_NMSE= -19.210 dB  (  524s)
+[lstmcnn     k=   1ms] epoch  12/100  train_mse=0.00077  val_NMSE= -20.078 dB  (  572s)
+[lstmcnn     k=   1ms] epoch  13/100  train_mse=0.00054  val_NMSE= -18.656 dB  (  619s)
+[lstmcnn     k=   1ms] epoch  14/100  train_mse=0.00059  val_NMSE= -17.168 dB  (  667s)
+[lstmcnn     k=   1ms] epoch  15/100  train_mse=0.00033  val_NMSE= -20.105 dB  (  715s)
+[lstmcnn     k=   1ms] epoch  16/100  train_mse=0.00034  val_NMSE= -21.398 dB  (  762s)
+[lstmcnn     k=   1ms] epoch  17/100  train_mse=0.00036  val_NMSE= -20.911 dB  (  810s)
+[lstmcnn     k=   1ms] epoch  18/100  train_mse=0.00035  val_NMSE= -18.829 dB  (  857s)
+[lstmcnn     k=   1ms] epoch  19/100  train_mse=0.00035  val_NMSE= -21.434 dB  (  905s)
+[lstmcnn     k=   1ms] epoch  20/100  train_mse=0.00034  val_NMSE= -21.302 dB  (  952s)
+[lstmcnn     k=   1ms] epoch  21/100  train_mse=0.00034  val_NMSE= -20.260 dB  ( 1000s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstmcnn k=1.0ms  val_NMSE=-24.083dB  test_NMSE=-5.630dB  params=1,656,386
+  checkpoint saved: runs\v9_dl_baselines\lstmcnn_k1ms_tp20.pt
+
+===== lstmcnn  horizon=2.0ms  (Tp=20) =====
+[lstmcnn     k=   2ms] epoch   1/100  train_mse=0.04542  val_NMSE= -19.612 dB  (   48s)  * best
+[lstmcnn     k=   2ms] epoch   2/100  train_mse=0.00145  val_NMSE= -21.078 dB  (   95s)  * best
+[lstmcnn     k=   2ms] epoch   3/100  train_mse=0.00131  val_NMSE= -17.980 dB  (  143s)
+[lstmcnn     k=   2ms] epoch   4/100  train_mse=0.00286  val_NMSE= -20.962 dB  (  191s)
+[lstmcnn     k=   2ms] epoch   5/100  train_mse=0.00109  val_NMSE= -22.317 dB  (  238s)  * best
+[lstmcnn     k=   2ms] epoch   6/100  train_mse=0.00094  val_NMSE= -22.849 dB  (  285s)  * best
+[lstmcnn     k=   2ms] epoch   7/100  train_mse=0.00099  val_NMSE= -22.400 dB  (  333s)
+[lstmcnn     k=   2ms] epoch   8/100  train_mse=0.00091  val_NMSE= -19.403 dB  (  380s)
+[lstmcnn     k=   2ms] epoch   9/100  train_mse=0.00115  val_NMSE= -22.248 dB  (  428s)
+[lstmcnn     k=   2ms] epoch  10/100  train_mse=0.00078  val_NMSE= -22.181 dB  (  476s)
+[lstmcnn     k=   2ms] epoch  11/100  train_mse=0.00095  val_NMSE= -21.512 dB  (  523s)
+[lstmcnn     k=   2ms] epoch  12/100  train_mse=0.00074  val_NMSE= -22.779 dB  (  571s)
+[lstmcnn     k=   2ms] epoch  13/100  train_mse=0.00074  val_NMSE= -22.074 dB  (  618s)
+[lstmcnn     k=   2ms] epoch  14/100  train_mse=0.00070  val_NMSE= -22.486 dB  (  666s)
+[lstmcnn     k=   2ms] epoch  15/100  train_mse=0.00043  val_NMSE= -23.130 dB  (  714s)  * best
+[lstmcnn     k=   2ms] epoch  16/100  train_mse=0.00045  val_NMSE= -22.269 dB  (  761s)
+[lstmcnn     k=   2ms] epoch  17/100  train_mse=0.00048  val_NMSE= -22.906 dB  (  808s)
+[lstmcnn     k=   2ms] epoch  18/100  train_mse=0.00044  val_NMSE= -22.747 dB  (  856s)
+[lstmcnn     k=   2ms] epoch  19/100  train_mse=0.00046  val_NMSE= -23.254 dB  (  899s)  * best
+[lstmcnn     k=   2ms] epoch  20/100  train_mse=0.00043  val_NMSE= -22.801 dB  (  947s)
+[lstmcnn     k=   2ms] epoch  21/100  train_mse=0.00044  val_NMSE= -22.323 dB  (  995s)
+[lstmcnn     k=   2ms] epoch  22/100  train_mse=0.00043  val_NMSE= -22.975 dB  ( 1042s)
+[lstmcnn     k=   2ms] epoch  23/100  train_mse=0.00044  val_NMSE= -22.926 dB  ( 1089s)
+[lstmcnn     k=   2ms] epoch  24/100  train_mse=0.00041  val_NMSE= -22.851 dB  ( 1137s)
+[lstmcnn     k=   2ms] epoch  25/100  train_mse=0.00044  val_NMSE= -22.971 dB  ( 1185s)
+[lstmcnn     k=   2ms] epoch  26/100  train_mse=0.00042  val_NMSE= -23.138 dB  ( 1233s)
+[lstmcnn     k=   2ms] epoch  27/100  train_mse=0.00043  val_NMSE= -22.845 dB  ( 1280s)
+[lstmcnn     k=   2ms] epoch  28/100  train_mse=0.00031  val_NMSE= -23.019 dB  ( 1328s)
+[lstmcnn     k=   2ms] epoch  29/100  train_mse=0.00031  val_NMSE= -23.086 dB  ( 1376s)
+[lstmcnn     k=   2ms] epoch  30/100  train_mse=0.00033  val_NMSE= -23.106 dB  ( 1423s)
+[lstmcnn     k=   2ms] epoch  31/100  train_mse=0.00033  val_NMSE= -23.035 dB  ( 1470s)
+[lstmcnn     k=   2ms] epoch  32/100  train_mse=0.00032  val_NMSE= -23.099 dB  ( 1519s)
+[lstmcnn     k=   2ms] epoch  33/100  train_mse=0.00032  val_NMSE= -23.069 dB  ( 1566s)
+[lstmcnn     k=   2ms] epoch  34/100  train_mse=0.00031  val_NMSE= -22.726 dB  ( 1614s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstmcnn k=2.0ms  val_NMSE=-23.254dB  test_NMSE=-5.689dB  params=1,656,386
+  checkpoint saved: runs\v9_dl_baselines\lstmcnn_k2ms_tp20.pt
+
+===== lstmcnn  horizon=4.0ms  (Tp=20) =====
+[lstmcnn     k=   4ms] epoch   1/100  train_mse=0.05302  val_NMSE= -18.315 dB  (   47s)  * best
+[lstmcnn     k=   4ms] epoch   2/100  train_mse=0.00188  val_NMSE= -19.799 dB  (   95s)  * best
+[lstmcnn     k=   4ms] epoch   3/100  train_mse=0.00156  val_NMSE= -20.522 dB  (  143s)  * best
+[lstmcnn     k=   4ms] epoch   4/100  train_mse=0.00143  val_NMSE= -20.340 dB  (  191s)
+[lstmcnn     k=   4ms] epoch   5/100  train_mse=0.00142  val_NMSE= -21.871 dB  (  239s)  * best
+[lstmcnn     k=   4ms] epoch   6/100  train_mse=0.00122  val_NMSE= -21.294 dB  (  287s)
+[lstmcnn     k=   4ms] epoch   7/100  train_mse=0.00126  val_NMSE= -21.407 dB  (  335s)
+[lstmcnn     k=   4ms] epoch   8/100  train_mse=0.00110  val_NMSE= -19.366 dB  (  383s)
+[lstmcnn     k=   4ms] epoch   9/100  train_mse=0.00116  val_NMSE= -21.814 dB  (  430s)
+[lstmcnn     k=   4ms] epoch  10/100  train_mse=0.00104  val_NMSE= -20.907 dB  (  478s)
+[lstmcnn     k=   4ms] epoch  11/100  train_mse=0.00173  val_NMSE= -19.792 dB  (  526s)
+[lstmcnn     k=   4ms] epoch  12/100  train_mse=0.00100  val_NMSE= -19.289 dB  (  573s)
+[lstmcnn     k=   4ms] epoch  13/100  train_mse=0.00096  val_NMSE= -21.399 dB  (  621s)
+[lstmcnn     k=   4ms] epoch  14/100  train_mse=0.00066  val_NMSE= -22.258 dB  (  669s)  * best
+[lstmcnn     k=   4ms] epoch  15/100  train_mse=0.00068  val_NMSE= -22.238 dB  (  717s)
+[lstmcnn     k=   4ms] epoch  16/100  train_mse=0.00068  val_NMSE= -21.257 dB  (  765s)
+[lstmcnn     k=   4ms] epoch  17/100  train_mse=0.00073  val_NMSE= -22.587 dB  (  812s)  * best
+[lstmcnn     k=   4ms] epoch  18/100  train_mse=0.00069  val_NMSE= -22.264 dB  (  860s)
+[lstmcnn     k=   4ms] epoch  19/100  train_mse=0.00070  val_NMSE= -22.170 dB  (  908s)
+[lstmcnn     k=   4ms] epoch  20/100  train_mse=0.00067  val_NMSE= -21.612 dB  (  956s)
+[lstmcnn     k=   4ms] epoch  21/100  train_mse=0.00068  val_NMSE= -21.709 dB  ( 1003s)
+[lstmcnn     k=   4ms] epoch  22/100  train_mse=0.00063  val_NMSE= -22.199 dB  ( 1052s)
+[lstmcnn     k=   4ms] epoch  23/100  train_mse=0.00067  val_NMSE= -21.413 dB  ( 1100s)
+[lstmcnn     k=   4ms] epoch  24/100  train_mse=0.00065  val_NMSE= -21.731 dB  ( 1147s)
+[lstmcnn     k=   4ms] epoch  25/100  train_mse=0.00065  val_NMSE= -21.820 dB  ( 1195s)
+[lstmcnn     k=   4ms] epoch  26/100  train_mse=0.00051  val_NMSE= -22.064 dB  ( 1243s)
+[lstmcnn     k=   4ms] epoch  27/100  train_mse=0.00052  val_NMSE= -21.846 dB  ( 1290s)
+[lstmcnn     k=   4ms] epoch  28/100  train_mse=0.00053  val_NMSE= -21.530 dB  ( 1338s)
+[lstmcnn     k=   4ms] epoch  29/100  train_mse=0.00052  val_NMSE= -21.854 dB  ( 1385s)
+[lstmcnn     k=   4ms] epoch  30/100  train_mse=0.00052  val_NMSE= -21.874 dB  ( 1433s)
+[lstmcnn     k=   4ms] epoch  31/100  train_mse=0.00052  val_NMSE= -21.850 dB  ( 1481s)
+[lstmcnn     k=   4ms] epoch  32/100  train_mse=0.00052  val_NMSE= -21.674 dB  ( 1529s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstmcnn k=4.0ms  val_NMSE=-22.587dB  test_NMSE=-5.916dB  params=1,656,386
+  checkpoint saved: runs\v9_dl_baselines\lstmcnn_k4ms_tp20.pt
+
+===== lstmcnn  horizon=8.0ms  (Tp=20) =====
+[lstmcnn     k=   8ms] epoch   1/100  train_mse=0.04685  val_NMSE= -17.727 dB  (   47s)  * best
+[lstmcnn     k=   8ms] epoch   2/100  train_mse=0.00256  val_NMSE= -18.552 dB  (   95s)  * best
+[lstmcnn     k=   8ms] epoch   3/100  train_mse=0.00228  val_NMSE= -18.935 dB  (  142s)  * best
+[lstmcnn     k=   8ms] epoch   4/100  train_mse=0.00206  val_NMSE= -18.969 dB  (  190s)  * best
+[lstmcnn     k=   8ms] epoch   5/100  train_mse=0.00339  val_NMSE= -18.560 dB  (  237s)
+[lstmcnn     k=   8ms] epoch   6/100  train_mse=0.00184  val_NMSE= -19.257 dB  (  285s)  * best
+[lstmcnn     k=   8ms] epoch   7/100  train_mse=0.00172  val_NMSE= -19.645 dB  (  333s)  * best
+[lstmcnn     k=   8ms] epoch   8/100  train_mse=0.00163  val_NMSE= -18.262 dB  (  381s)
+[lstmcnn     k=   8ms] epoch   9/100  train_mse=0.00178  val_NMSE= -19.605 dB  (  428s)
+[lstmcnn     k=   8ms] epoch  10/100  train_mse=0.00164  val_NMSE= -19.459 dB  (  476s)
+[lstmcnn     k=   8ms] epoch  11/100  train_mse=0.00161  val_NMSE= -19.001 dB  (  524s)
+[lstmcnn     k=   8ms] epoch  12/100  train_mse=0.00151  val_NMSE= -18.824 dB  (  571s)
+[lstmcnn     k=   8ms] epoch  13/100  train_mse=0.00147  val_NMSE= -18.845 dB  (  618s)
+[lstmcnn     k=   8ms] epoch  14/100  train_mse=0.00197  val_NMSE= -18.478 dB  (  666s)
+[lstmcnn     k=   8ms] epoch  15/100  train_mse=0.00141  val_NMSE= -19.501 dB  (  714s)
+[lstmcnn     k=   8ms] epoch  16/100  train_mse=0.00107  val_NMSE= -19.501 dB  (  762s)
+[lstmcnn     k=   8ms] epoch  17/100  train_mse=0.00112  val_NMSE= -19.747 dB  (  809s)  * best
+[lstmcnn     k=   8ms] epoch  18/100  train_mse=0.00113  val_NMSE= -19.552 dB  (  856s)
+[lstmcnn     k=   8ms] epoch  19/100  train_mse=0.00112  val_NMSE= -19.807 dB  (  904s)  * best
+[lstmcnn     k=   8ms] epoch  20/100  train_mse=0.00111  val_NMSE= -19.259 dB  (  951s)
+[lstmcnn     k=   8ms] epoch  21/100  train_mse=0.00110  val_NMSE= -19.473 dB  (  999s)
+[lstmcnn     k=   8ms] epoch  22/100  train_mse=0.00108  val_NMSE= -19.367 dB  ( 1046s)
+[lstmcnn     k=   8ms] epoch  23/100  train_mse=0.00107  val_NMSE= -19.119 dB  ( 1094s)
+[lstmcnn     k=   8ms] epoch  24/100  train_mse=0.00106  val_NMSE= -19.339 dB  ( 1142s)
+[lstmcnn     k=   8ms] epoch  25/100  train_mse=0.00107  val_NMSE= -19.738 dB  ( 1189s)
+[lstmcnn     k=   8ms] epoch  26/100  train_mse=0.00106  val_NMSE= -19.379 dB  ( 1236s)
+[lstmcnn     k=   8ms] epoch  27/100  train_mse=0.00107  val_NMSE= -19.198 dB  ( 1284s)
+[lstmcnn     k=   8ms] epoch  28/100  train_mse=0.00092  val_NMSE= -19.462 dB  ( 1331s)
+[lstmcnn     k=   8ms] epoch  29/100  train_mse=0.00091  val_NMSE= -19.351 dB  ( 1379s)
+[lstmcnn     k=   8ms] epoch  30/100  train_mse=0.00091  val_NMSE= -19.563 dB  ( 1427s)
+[lstmcnn     k=   8ms] epoch  31/100  train_mse=0.00092  val_NMSE= -19.312 dB  ( 1474s)
+[lstmcnn     k=   8ms] epoch  32/100  train_mse=0.00091  val_NMSE= -19.322 dB  ( 1522s)
+[lstmcnn     k=   8ms] epoch  33/100  train_mse=0.00090  val_NMSE= -19.460 dB  ( 1569s)
+[lstmcnn     k=   8ms] epoch  34/100  train_mse=0.00090  val_NMSE= -19.250 dB  ( 1616s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstmcnn k=8.0ms  val_NMSE=-19.807dB  test_NMSE=-7.554dB  params=1,656,386
+  checkpoint saved: runs\v9_dl_baselines\lstmcnn_k8ms_tp20.pt
+
+===== lstmcnn  horizon=12.0ms  (Tp=20) =====
+[lstmcnn     k=  12ms] epoch   1/100  train_mse=0.05009  val_NMSE= -16.482 dB  (   48s)  * best
+[lstmcnn     k=  12ms] epoch   2/100  train_mse=0.00356  val_NMSE= -17.074 dB  (   95s)  * best
+[lstmcnn     k=  12ms] epoch   3/100  train_mse=0.00309  val_NMSE= -17.428 dB  (  142s)  * best
+[lstmcnn     k=  12ms] epoch   4/100  train_mse=0.00276  val_NMSE= -17.593 dB  (  190s)  * best
+[lstmcnn     k=  12ms] epoch   5/100  train_mse=0.00289  val_NMSE= -18.389 dB  (  237s)  * best
+[lstmcnn     k=  12ms] epoch   6/100  train_mse=0.00239  val_NMSE= -18.452 dB  (  285s)  * best
+[lstmcnn     k=  12ms] epoch   7/100  train_mse=0.00226  val_NMSE= -18.170 dB  (  332s)
+[lstmcnn     k=  12ms] epoch   8/100  train_mse=0.00224  val_NMSE= -17.576 dB  (  380s)
+[lstmcnn     k=  12ms] epoch   9/100  train_mse=0.00238  val_NMSE= -18.266 dB  (  428s)
+[lstmcnn     k=  12ms] epoch  10/100  train_mse=0.00211  val_NMSE= -18.507 dB  (  475s)  * best
+[lstmcnn     k=  12ms] epoch  11/100  train_mse=0.00286  val_NMSE= -17.392 dB  (  522s)
+[lstmcnn     k=  12ms] epoch  12/100  train_mse=0.00206  val_NMSE= -17.662 dB  (  570s)
+[lstmcnn     k=  12ms] epoch  13/100  train_mse=0.00196  val_NMSE= -18.348 dB  (  618s)
+[lstmcnn     k=  12ms] epoch  14/100  train_mse=0.00193  val_NMSE= -17.492 dB  (  666s)
+[lstmcnn     k=  12ms] epoch  15/100  train_mse=0.00192  val_NMSE= -17.848 dB  (  713s)
+[lstmcnn     k=  12ms] epoch  16/100  train_mse=0.00197  val_NMSE= -17.553 dB  (  760s)
+[lstmcnn     k=  12ms] epoch  17/100  train_mse=0.00205  val_NMSE= -18.292 dB  (  808s)
+[lstmcnn     k=  12ms] epoch  18/100  train_mse=0.00186  val_NMSE= -18.138 dB  (  855s)
+[lstmcnn     k=  12ms] epoch  19/100  train_mse=0.00150  val_NMSE= -18.377 dB  (  903s)
+[lstmcnn     k=  12ms] epoch  20/100  train_mse=0.00152  val_NMSE= -18.053 dB  (  951s)
+[lstmcnn     k=  12ms] epoch  21/100  train_mse=0.00153  val_NMSE= -18.039 dB  (  998s)
+[lstmcnn     k=  12ms] epoch  22/100  train_mse=0.00150  val_NMSE= -18.197 dB  ( 1046s)
+[lstmcnn     k=  12ms] epoch  23/100  train_mse=0.00149  val_NMSE= -16.562 dB  ( 1093s)
+[lstmcnn     k=  12ms] epoch  24/100  train_mse=0.00151  val_NMSE= -18.324 dB  ( 1140s)
+[lstmcnn     k=  12ms] epoch  25/100  train_mse=0.00149  val_NMSE= -18.479 dB  ( 1188s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstmcnn k=12.0ms  val_NMSE=-18.507dB  test_NMSE=-6.514dB  params=1,656,386
+  checkpoint saved: runs\v9_dl_baselines\lstmcnn_k12ms_tp20.pt
+
+===== lstmcnn  horizon=16.0ms  (Tp=20) =====
+[lstmcnn     k=  16ms] epoch   1/100  train_mse=0.05123  val_NMSE= -15.319 dB  (   47s)  * best
+[lstmcnn     k=  16ms] epoch   2/100  train_mse=0.00456  val_NMSE= -15.843 dB  (   95s)  * best
+[lstmcnn     k=  16ms] epoch   3/100  train_mse=0.00424  val_NMSE= -16.062 dB  (  142s)  * best
+[lstmcnn     k=  16ms] epoch   4/100  train_mse=0.00346  val_NMSE= -16.610 dB  (  190s)  * best
+[lstmcnn     k=  16ms] epoch   5/100  train_mse=0.00346  val_NMSE= -16.873 dB  (  238s)  * best
+[lstmcnn     k=  16ms] epoch   6/100  train_mse=0.00307  val_NMSE= -16.656 dB  (  285s)
+[lstmcnn     k=  16ms] epoch   7/100  train_mse=0.00306  val_NMSE= -16.768 dB  (  333s)
+[lstmcnn     k=  16ms] epoch   8/100  train_mse=0.00292  val_NMSE= -16.371 dB  (  380s)
+[lstmcnn     k=  16ms] epoch   9/100  train_mse=0.00393  val_NMSE= -16.044 dB  (  427s)
+[lstmcnn     k=  16ms] epoch  10/100  train_mse=0.00289  val_NMSE= -16.930 dB  (  475s)  * best
+[lstmcnn     k=  16ms] epoch  11/100  train_mse=0.00262  val_NMSE= -16.190 dB  (  523s)
+[lstmcnn     k=  16ms] epoch  12/100  train_mse=0.00266  val_NMSE= -16.526 dB  (  570s)
+[lstmcnn     k=  16ms] epoch  13/100  train_mse=0.00258  val_NMSE= -17.039 dB  (  618s)  * best
+[lstmcnn     k=  16ms] epoch  14/100  train_mse=0.00256  val_NMSE= -16.918 dB  (  665s)
+[lstmcnn     k=  16ms] epoch  15/100  train_mse=0.00257  val_NMSE= -16.689 dB  (  713s)
+[lstmcnn     k=  16ms] epoch  16/100  train_mse=0.00257  val_NMSE= -16.136 dB  (  760s)
+[lstmcnn     k=  16ms] epoch  17/100  train_mse=0.00250  val_NMSE= -16.927 dB  (  808s)
+[lstmcnn     k=  16ms] epoch  18/100  train_mse=0.00244  val_NMSE= -16.678 dB  (  855s)
+[lstmcnn     k=  16ms] epoch  19/100  train_mse=0.00250  val_NMSE= -16.992 dB  (  903s)
+[lstmcnn     k=  16ms] epoch  20/100  train_mse=0.00242  val_NMSE= -16.552 dB  (  950s)
+[lstmcnn     k=  16ms] epoch  21/100  train_mse=0.00237  val_NMSE= -15.534 dB  (  998s)
+[lstmcnn     k=  16ms] epoch  22/100  train_mse=0.00196  val_NMSE= -16.284 dB  ( 1045s)
+[lstmcnn     k=  16ms] epoch  23/100  train_mse=0.00194  val_NMSE= -15.751 dB  ( 1093s)
+[lstmcnn     k=  16ms] epoch  24/100  train_mse=0.00199  val_NMSE= -16.423 dB  ( 1140s)
+[lstmcnn     k=  16ms] epoch  25/100  train_mse=0.00195  val_NMSE= -16.657 dB  ( 1187s)
+[lstmcnn     k=  16ms] epoch  26/100  train_mse=0.00195  val_NMSE= -16.348 dB  ( 1235s)
+[lstmcnn     k=  16ms] epoch  27/100  train_mse=0.00195  val_NMSE= -16.781 dB  ( 1283s)
+[lstmcnn     k=  16ms] epoch  28/100  train_mse=0.00196  val_NMSE= -16.341 dB  ( 1330s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> lstmcnn k=16.0ms  val_NMSE=-17.039dB  test_NMSE=-6.070dB  params=1,656,386
+  checkpoint saved: runs\v9_dl_baselines\lstmcnn_k16ms_tp20.pt
+
+===== transformer  horizon=1.0ms  (Tp=20) =====
+C:\Users\ejko\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\functional.py:5560: UserWarning: 1Torch was not compiled with flash attention. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\builder\windows\pytorch\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp:555.)
+  attn_output = scaled_dot_product_attention(q, k, v, attn_mask, dropout_p, is_causal)
+[transformer k=   1ms] epoch   1/100  train_mse=0.01107  val_NMSE= -21.311 dB  (   34s)  * best
+[transformer k=   1ms] epoch   2/100  train_mse=0.00158  val_NMSE= -21.982 dB  (   68s)  * best
+[transformer k=   1ms] epoch   3/100  train_mse=0.00115  val_NMSE= -23.165 dB  (  102s)  * best
+[transformer k=   1ms] epoch   4/100  train_mse=0.00100  val_NMSE= -21.443 dB  (  136s)
+[transformer k=   1ms] epoch   5/100  train_mse=0.00095  val_NMSE= -24.646 dB  (  170s)  * best
+[transformer k=   1ms] epoch   6/100  train_mse=0.00075  val_NMSE= -24.336 dB  (  205s)
+[transformer k=   1ms] epoch   7/100  train_mse=0.00075  val_NMSE= -22.758 dB  (  239s)
+[transformer k=   1ms] epoch   8/100  train_mse=0.00068  val_NMSE= -24.232 dB  (  273s)
+[transformer k=   1ms] epoch   9/100  train_mse=0.00061  val_NMSE= -25.233 dB  (  307s)  * best
+[transformer k=   1ms] epoch  10/100  train_mse=0.00063  val_NMSE= -25.435 dB  (  341s)  * best
+[transformer k=   1ms] epoch  11/100  train_mse=0.00056  val_NMSE= -22.650 dB  (  376s)
+[transformer k=   1ms] epoch  12/100  train_mse=0.00055  val_NMSE= -25.492 dB  (  410s)  * best
+[transformer k=   1ms] epoch  13/100  train_mse=0.00048  val_NMSE= -25.057 dB  (  444s)
+[transformer k=   1ms] epoch  14/100  train_mse=0.00048  val_NMSE= -24.899 dB  (  479s)
+[transformer k=   1ms] epoch  15/100  train_mse=0.00050  val_NMSE= -25.096 dB  (  513s)
+[transformer k=   1ms] epoch  16/100  train_mse=0.00044  val_NMSE= -24.476 dB  (  547s)
+[transformer k=   1ms] epoch  17/100  train_mse=0.00042  val_NMSE= -25.512 dB  (  581s)  * best
+[transformer k=   1ms] epoch  18/100  train_mse=0.00041  val_NMSE= -23.635 dB  (  615s)
+[transformer k=   1ms] epoch  19/100  train_mse=0.00041  val_NMSE= -25.510 dB  (  650s)
+[transformer k=   1ms] epoch  20/100  train_mse=0.00039  val_NMSE= -23.206 dB  (  684s)
+[transformer k=   1ms] epoch  21/100  train_mse=0.00040  val_NMSE= -24.659 dB  (  718s)
+[transformer k=   1ms] epoch  22/100  train_mse=0.00035  val_NMSE= -25.009 dB  (  753s)
+[transformer k=   1ms] epoch  23/100  train_mse=0.00043  val_NMSE= -25.193 dB  (  787s)
+[transformer k=   1ms] epoch  24/100  train_mse=0.00034  val_NMSE= -25.041 dB  (  821s)
+[transformer k=   1ms] epoch  25/100  train_mse=0.00032  val_NMSE= -25.400 dB  (  856s)
+[transformer k=   1ms] epoch  26/100  train_mse=0.00032  val_NMSE= -24.904 dB  (  890s)
+[transformer k=   1ms] epoch  27/100  train_mse=0.00033  val_NMSE= -24.564 dB  (  924s)
+[transformer k=   1ms] epoch  28/100  train_mse=0.00020  val_NMSE= -24.637 dB  (  959s)
+[transformer k=   1ms] epoch  29/100  train_mse=0.00021  val_NMSE= -24.466 dB  (  993s)
+[transformer k=   1ms] epoch  30/100  train_mse=0.00021  val_NMSE= -24.249 dB  ( 1027s)
+[transformer k=   1ms] epoch  31/100  train_mse=0.00022  val_NMSE= -24.013 dB  ( 1062s)
+[transformer k=   1ms] epoch  32/100  train_mse=0.00021  val_NMSE= -23.941 dB  ( 1096s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> transformer k=1.0ms  val_NMSE=-25.512dB  test_NMSE=-11.313dB  params=1,915,136
+  checkpoint saved: runs\v9_dl_baselines\transformer_k1ms_tp20.pt
+
+===== transformer  horizon=2.0ms  (Tp=20) =====
+[transformer k=   2ms] epoch   1/100  train_mse=0.01132  val_NMSE= -20.850 dB  (   34s)  * best
+[transformer k=   2ms] epoch   2/100  train_mse=0.00177  val_NMSE= -20.059 dB  (   69s)
+[transformer k=   2ms] epoch   3/100  train_mse=0.00124  val_NMSE= -22.046 dB  (  103s)  * best
+[transformer k=   2ms] epoch   4/100  train_mse=0.00113  val_NMSE= -21.140 dB  (  138s)
+[transformer k=   2ms] epoch   5/100  train_mse=0.00110  val_NMSE= -24.062 dB  (  172s)  * best
+[transformer k=   2ms] epoch   6/100  train_mse=0.00087  val_NMSE= -23.521 dB  (  206s)
+[transformer k=   2ms] epoch   7/100  train_mse=0.00083  val_NMSE= -23.260 dB  (  241s)
+[transformer k=   2ms] epoch   8/100  train_mse=0.00082  val_NMSE= -22.181 dB  (  275s)
+[transformer k=   2ms] epoch   9/100  train_mse=0.00077  val_NMSE= -23.914 dB  (  309s)
+[transformer k=   2ms] epoch  10/100  train_mse=0.00072  val_NMSE= -24.627 dB  (  344s)  * best
+[transformer k=   2ms] epoch  11/100  train_mse=0.00069  val_NMSE= -22.958 dB  (  378s)
+[transformer k=   2ms] epoch  12/100  train_mse=0.00062  val_NMSE= -23.938 dB  (  413s)
+[transformer k=   2ms] epoch  13/100  train_mse=0.00058  val_NMSE= -24.736 dB  (  447s)  * best
+[transformer k=   2ms] epoch  14/100  train_mse=0.00063  val_NMSE= -23.152 dB  (  482s)
+[transformer k=   2ms] epoch  15/100  train_mse=0.00062  val_NMSE= -24.074 dB  (  516s)
+[transformer k=   2ms] epoch  16/100  train_mse=0.00054  val_NMSE= -21.439 dB  (  551s)
+[transformer k=   2ms] epoch  17/100  train_mse=0.00057  val_NMSE= -24.995 dB  (  585s)  * best
+[transformer k=   2ms] epoch  18/100  train_mse=0.00053  val_NMSE= -23.513 dB  (  620s)
+[transformer k=   2ms] epoch  19/100  train_mse=0.00051  val_NMSE= -24.987 dB  (  654s)
+[transformer k=   2ms] epoch  20/100  train_mse=0.00048  val_NMSE= -23.777 dB  (  689s)
+[transformer k=   2ms] epoch  21/100  train_mse=0.00047  val_NMSE= -24.084 dB  (  724s)
+[transformer k=   2ms] epoch  22/100  train_mse=0.00048  val_NMSE= -24.491 dB  (  758s)
+[transformer k=   2ms] epoch  23/100  train_mse=0.00048  val_NMSE= -24.911 dB  (  793s)
+[transformer k=   2ms] epoch  24/100  train_mse=0.00046  val_NMSE= -23.705 dB  (  828s)
+[transformer k=   2ms] epoch  25/100  train_mse=0.00044  val_NMSE= -24.489 dB  (  862s)
+[transformer k=   2ms] epoch  26/100  train_mse=0.00031  val_NMSE= -24.938 dB  (  897s)
+[transformer k=   2ms] epoch  27/100  train_mse=0.00031  val_NMSE= -24.323 dB  (  932s)
+[transformer k=   2ms] epoch  28/100  train_mse=0.00032  val_NMSE= -24.463 dB  (  966s)
+[transformer k=   2ms] epoch  29/100  train_mse=0.00031  val_NMSE= -24.507 dB  ( 1001s)
+[transformer k=   2ms] epoch  30/100  train_mse=0.00032  val_NMSE= -24.456 dB  ( 1035s)
+[transformer k=   2ms] epoch  31/100  train_mse=0.00032  val_NMSE= -23.899 dB  ( 1070s)
+[transformer k=   2ms] epoch  32/100  train_mse=0.00031  val_NMSE= -23.932 dB  ( 1105s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> transformer k=2.0ms  val_NMSE=-24.995dB  test_NMSE=-11.164dB  params=1,915,136
+  checkpoint saved: runs\v9_dl_baselines\transformer_k2ms_tp20.pt
+
+===== transformer  horizon=4.0ms  (Tp=20) =====
+[transformer k=   4ms] epoch   1/100  train_mse=0.01161  val_NMSE= -20.398 dB  (   35s)  * best
+[transformer k=   4ms] epoch   2/100  train_mse=0.00202  val_NMSE= -20.591 dB  (   69s)  * best
+[transformer k=   4ms] epoch   3/100  train_mse=0.00152  val_NMSE= -21.516 dB  (  104s)  * best
+[transformer k=   4ms] epoch   4/100  train_mse=0.00136  val_NMSE= -20.985 dB  (  139s)
+[transformer k=   4ms] epoch   5/100  train_mse=0.00135  val_NMSE= -23.062 dB  (  174s)  * best
+[transformer k=   4ms] epoch   6/100  train_mse=0.00113  val_NMSE= -22.716 dB  (  208s)
+[transformer k=   4ms] epoch   7/100  train_mse=0.00110  val_NMSE= -22.175 dB  (  243s)
+[transformer k=   4ms] epoch   8/100  train_mse=0.00103  val_NMSE= -20.874 dB  (  278s)
+[transformer k=   4ms] epoch   9/100  train_mse=0.00102  val_NMSE= -23.403 dB  (  312s)  * best
+[transformer k=   4ms] epoch  10/100  train_mse=0.00095  val_NMSE= -21.589 dB  (  347s)
+[transformer k=   4ms] epoch  11/100  train_mse=0.00093  val_NMSE= -21.834 dB  (  382s)
+[transformer k=   4ms] epoch  12/100  train_mse=0.00085  val_NMSE= -21.002 dB  (  417s)
+[transformer k=   4ms] epoch  13/100  train_mse=0.00085  val_NMSE= -22.901 dB  (  452s)
+[transformer k=   4ms] epoch  14/100  train_mse=0.00083  val_NMSE= -21.901 dB  (  487s)
+[transformer k=   4ms] epoch  15/100  train_mse=0.00084  val_NMSE= -23.282 dB  (  522s)
+[transformer k=   4ms] epoch  16/100  train_mse=0.00075  val_NMSE= -20.667 dB  (  557s)
+[transformer k=   4ms] epoch  17/100  train_mse=0.00079  val_NMSE= -23.152 dB  (  591s)
+[transformer k=   4ms] epoch  18/100  train_mse=0.00055  val_NMSE= -23.213 dB  (  626s)
+[transformer k=   4ms] epoch  19/100  train_mse=0.00055  val_NMSE= -23.547 dB  (  661s)  * best
+[transformer k=   4ms] epoch  20/100  train_mse=0.00055  val_NMSE= -22.542 dB  (  696s)
+[transformer k=   4ms] epoch  21/100  train_mse=0.00056  val_NMSE= -23.104 dB  (  731s)
+[transformer k=   4ms] epoch  22/100  train_mse=0.00054  val_NMSE= -22.914 dB  (  766s)
+[transformer k=   4ms] epoch  23/100  train_mse=0.00056  val_NMSE= -22.157 dB  (  800s)
+[transformer k=   4ms] epoch  24/100  train_mse=0.00054  val_NMSE= -22.826 dB  (  835s)
+[transformer k=   4ms] epoch  25/100  train_mse=0.00054  val_NMSE= -23.137 dB  (  870s)
+[transformer k=   4ms] epoch  26/100  train_mse=0.00054  val_NMSE= -22.927 dB  (  905s)
+[transformer k=   4ms] epoch  27/100  train_mse=0.00053  val_NMSE= -22.790 dB  (  940s)
+[transformer k=   4ms] epoch  28/100  train_mse=0.00045  val_NMSE= -23.008 dB  (  975s)
+[transformer k=   4ms] epoch  29/100  train_mse=0.00045  val_NMSE= -22.933 dB  ( 1010s)
+[transformer k=   4ms] epoch  30/100  train_mse=0.00045  val_NMSE= -23.071 dB  ( 1045s)
+[transformer k=   4ms] epoch  31/100  train_mse=0.00045  val_NMSE= -22.958 dB  ( 1080s)
+[transformer k=   4ms] epoch  32/100  train_mse=0.00045  val_NMSE= -22.748 dB  ( 1115s)
+[transformer k=   4ms] epoch  33/100  train_mse=0.00045  val_NMSE= -23.053 dB  ( 1149s)
+[transformer k=   4ms] epoch  34/100  train_mse=0.00044  val_NMSE= -22.841 dB  ( 1184s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> transformer k=4.0ms  val_NMSE=-23.547dB  test_NMSE=-10.462dB  params=1,915,136
+  checkpoint saved: runs\v9_dl_baselines\transformer_k4ms_tp20.pt
+
+===== transformer  horizon=8.0ms  (Tp=20) =====
+[transformer k=   8ms] epoch   1/100  train_mse=0.01247  val_NMSE= -18.622 dB  (   35s)  * best
+[transformer k=   8ms] epoch   2/100  train_mse=0.00263  val_NMSE= -18.388 dB  (   69s)
+[transformer k=   8ms] epoch   3/100  train_mse=0.00207  val_NMSE= -20.257 dB  (  104s)  * best
+[transformer k=   8ms] epoch   4/100  train_mse=0.00188  val_NMSE= -19.360 dB  (  139s)
+[transformer k=   8ms] epoch   5/100  train_mse=0.00178  val_NMSE= -20.260 dB  (  174s)
+[transformer k=   8ms] epoch   6/100  train_mse=0.00163  val_NMSE= -20.158 dB  (  208s)
+[transformer k=   8ms] epoch   7/100  train_mse=0.00160  val_NMSE= -20.675 dB  (  243s)  * best
+[transformer k=   8ms] epoch   8/100  train_mse=0.00151  val_NMSE= -18.291 dB  (  278s)
+[transformer k=   8ms] epoch   9/100  train_mse=0.00153  val_NMSE= -20.917 dB  (  313s)  * best
+[transformer k=   8ms] epoch  10/100  train_mse=0.00139  val_NMSE= -20.457 dB  (  348s)
+[transformer k=   8ms] epoch  11/100  train_mse=0.00144  val_NMSE= -19.935 dB  (  382s)
+[transformer k=   8ms] epoch  12/100  train_mse=0.00133  val_NMSE= -19.822 dB  (  417s)
+[transformer k=   8ms] epoch  13/100  train_mse=0.00127  val_NMSE= -20.058 dB  (  452s)
+[transformer k=   8ms] epoch  14/100  train_mse=0.00128  val_NMSE= -20.324 dB  (  487s)
+[transformer k=   8ms] epoch  15/100  train_mse=0.00128  val_NMSE= -20.814 dB  (  521s)
+[transformer k=   8ms] epoch  16/100  train_mse=0.00120  val_NMSE= -19.650 dB  (  556s)
+[transformer k=   8ms] epoch  17/100  train_mse=0.00121  val_NMSE= -21.198 dB  (  591s)  * best
+[transformer k=   8ms] epoch  18/100  train_mse=0.00121  val_NMSE= -20.822 dB  (  626s)
+[transformer k=   8ms] epoch  19/100  train_mse=0.00117  val_NMSE= -21.016 dB  (  661s)
+[transformer k=   8ms] epoch  20/100  train_mse=0.00115  val_NMSE= -20.586 dB  (  696s)
+[transformer k=   8ms] epoch  21/100  train_mse=0.00114  val_NMSE= -20.814 dB  (  731s)
+[transformer k=   8ms] epoch  22/100  train_mse=0.00112  val_NMSE= -20.693 dB  (  766s)
+[transformer k=   8ms] epoch  23/100  train_mse=0.00112  val_NMSE= -20.469 dB  (  801s)
+[transformer k=   8ms] epoch  24/100  train_mse=0.00109  val_NMSE= -20.806 dB  (  836s)
+[transformer k=   8ms] epoch  25/100  train_mse=0.00109  val_NMSE= -20.952 dB  (  871s)
+[transformer k=   8ms] epoch  26/100  train_mse=0.00089  val_NMSE= -21.177 dB  (  906s)
+[transformer k=   8ms] epoch  27/100  train_mse=0.00089  val_NMSE= -20.899 dB  (  941s)
+[transformer k=   8ms] epoch  28/100  train_mse=0.00090  val_NMSE= -20.868 dB  (  976s)
+[transformer k=   8ms] epoch  29/100  train_mse=0.00088  val_NMSE= -20.866 dB  ( 1011s)
+[transformer k=   8ms] epoch  30/100  train_mse=0.00089  val_NMSE= -20.740 dB  ( 1046s)
+[transformer k=   8ms] epoch  31/100  train_mse=0.00089  val_NMSE= -20.230 dB  ( 1081s)
+[transformer k=   8ms] epoch  32/100  train_mse=0.00089  val_NMSE= -20.462 dB  ( 1116s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> transformer k=8.0ms  val_NMSE=-21.198dB  test_NMSE=-10.436dB  params=1,915,136
+  checkpoint saved: runs\v9_dl_baselines\transformer_k8ms_tp20.pt
+
+===== transformer  horizon=12.0ms  (Tp=20) =====
+[transformer k=  12ms] epoch   1/100  train_mse=0.01327  val_NMSE= -16.790 dB  (   35s)  * best
+[transformer k=  12ms] epoch   2/100  train_mse=0.00328  val_NMSE= -17.344 dB  (   70s)  * best
+[transformer k=  12ms] epoch   3/100  train_mse=0.00271  val_NMSE= -17.795 dB  (  105s)  * best
+[transformer k=  12ms] epoch   4/100  train_mse=0.00249  val_NMSE= -18.076 dB  (  140s)  * best
+[transformer k=  12ms] epoch   5/100  train_mse=0.00232  val_NMSE= -18.738 dB  (  176s)  * best
+[transformer k=  12ms] epoch   6/100  train_mse=0.00221  val_NMSE= -18.155 dB  (  211s)
+[transformer k=  12ms] epoch   7/100  train_mse=0.00217  val_NMSE= -19.258 dB  (  246s)  * best
+[transformer k=  12ms] epoch   8/100  train_mse=0.00202  val_NMSE= -17.394 dB  (  281s)
+[transformer k=  12ms] epoch   9/100  train_mse=0.00203  val_NMSE= -17.892 dB  (  317s)
+[transformer k=  12ms] epoch  10/100  train_mse=0.00193  val_NMSE= -18.874 dB  (  346s)
+[transformer k=  12ms] epoch  11/100  train_mse=0.00190  val_NMSE= -18.559 dB  (  382s)
+[transformer k=  12ms] epoch  12/100  train_mse=0.00186  val_NMSE= -18.236 dB  (  417s)
+[transformer k=  12ms] epoch  13/100  train_mse=0.00179  val_NMSE= -18.382 dB  (  452s)
+[transformer k=  12ms] epoch  14/100  train_mse=0.00176  val_NMSE= -19.007 dB  (  487s)
+[transformer k=  12ms] epoch  15/100  train_mse=0.00177  val_NMSE= -18.321 dB  (  522s)
+[transformer k=  12ms] epoch  16/100  train_mse=0.00139  val_NMSE= -18.929 dB  (  557s)
+[transformer k=  12ms] epoch  17/100  train_mse=0.00141  val_NMSE= -19.248 dB  (  592s)
+[transformer k=  12ms] epoch  18/100  train_mse=0.00142  val_NMSE= -19.187 dB  (  628s)
+[transformer k=  12ms] epoch  19/100  train_mse=0.00139  val_NMSE= -19.000 dB  (  663s)
+[transformer k=  12ms] epoch  20/100  train_mse=0.00140  val_NMSE= -18.827 dB  (  698s)
+[transformer k=  12ms] epoch  21/100  train_mse=0.00140  val_NMSE= -19.068 dB  (  733s)
+[transformer k=  12ms] epoch  22/100  train_mse=0.00138  val_NMSE= -19.116 dB  (  768s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> transformer k=12.0ms  val_NMSE=-19.258dB  test_NMSE=-11.686dB  params=1,915,136
+  checkpoint saved: runs\v9_dl_baselines\transformer_k12ms_tp20.pt
+
+===== transformer  horizon=16.0ms  (Tp=20) =====
+[transformer k=  16ms] epoch   1/100  train_mse=0.01443  val_NMSE= -15.449 dB  (   35s)  * best
+[transformer k=  16ms] epoch   2/100  train_mse=0.00399  val_NMSE= -16.621 dB  (   70s)  * best
+[transformer k=  16ms] epoch   3/100  train_mse=0.00344  val_NMSE= -17.236 dB  (  106s)  * best
+[transformer k=  16ms] epoch   4/100  train_mse=0.00312  val_NMSE= -17.198 dB  (  141s)
+[transformer k=  16ms] epoch   5/100  train_mse=0.00298  val_NMSE= -17.533 dB  (  176s)  * best
+[transformer k=  16ms] epoch   6/100  train_mse=0.00285  val_NMSE= -17.238 dB  (  211s)
+[transformer k=  16ms] epoch   7/100  train_mse=0.00276  val_NMSE= -18.062 dB  (  247s)  * best
+[transformer k=  16ms] epoch   8/100  train_mse=0.00258  val_NMSE= -16.902 dB  (  282s)
+[transformer k=  16ms] epoch   9/100  train_mse=0.00261  val_NMSE= -17.041 dB  (  317s)
+[transformer k=  16ms] epoch  10/100  train_mse=0.00252  val_NMSE= -17.757 dB  (  352s)
+[transformer k=  16ms] epoch  11/100  train_mse=0.00245  val_NMSE= -17.565 dB  (  388s)
+[transformer k=  16ms] epoch  12/100  train_mse=0.00243  val_NMSE= -17.311 dB  (  423s)
+[transformer k=  16ms] epoch  13/100  train_mse=0.00234  val_NMSE= -17.182 dB  (  458s)
+[transformer k=  16ms] epoch  14/100  train_mse=0.00232  val_NMSE= -17.657 dB  (  493s)
+[transformer k=  16ms] epoch  15/100  train_mse=0.00231  val_NMSE= -17.397 dB  (  529s)
+[transformer k=  16ms] epoch  16/100  train_mse=0.00186  val_NMSE= -17.673 dB  (  564s)
+[transformer k=  16ms] epoch  17/100  train_mse=0.00187  val_NMSE= -17.805 dB  (  599s)
+[transformer k=  16ms] epoch  18/100  train_mse=0.00188  val_NMSE= -17.910 dB  (  634s)
+[transformer k=  16ms] epoch  19/100  train_mse=0.00185  val_NMSE= -17.816 dB  (  669s)
+[transformer k=  16ms] epoch  20/100  train_mse=0.00188  val_NMSE= -17.820 dB  (  705s)
+[transformer k=  16ms] epoch  21/100  train_mse=0.00184  val_NMSE= -17.702 dB  (  740s)
+[transformer k=  16ms] epoch  22/100  train_mse=0.00184  val_NMSE= -17.588 dB  (  775s)
+  -> early stop (patience=15 epochs without improvement)
+  >>> transformer k=16.0ms  val_NMSE=-18.062dB  test_NMSE=-11.415dB  params=1,915,136
+  checkpoint saved: runs\v9_dl_baselines\transformer_k16ms_tp20.pt
+
+================= 요약 (test NMSE_dB, 낮을수록 좋음) =================
+model        | k=   1ms | k=   2ms | k=   4ms | k=   8ms | k=  12ms | k=  16ms
+------------------------------------------------------------------------------
+lstm         | -11.047 | -10.734 | -11.220 |  -9.408 |  -9.500 | -10.290
+gru          | -12.170 | -12.503 | -12.500 | -12.107 | -11.545 |  -9.796
+lstmcnn      |  -5.630 |  -5.689 |  -5.916 |  -7.554 |  -6.514 |  -6.070
+transformer  | -11.313 | -11.164 | -10.462 | -10.436 | -11.686 | -11.415
+
+결과 저장: runs\v9_dl_baselines\results.json, runs\v9_dl_baselines\results.csv

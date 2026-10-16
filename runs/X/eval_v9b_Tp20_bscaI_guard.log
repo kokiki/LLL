@@ -1,0 +1,123 @@
+eval split=guard Split(E=86, n_sc=12, T=150, dt=1.0ms, NLOS=33, Tp_file=12, Tf_file=16)  windows=9890  ks=[1, 16] (x1.0ms)  load 1.6s
+baselines fitted 50.4s  noise_var=6.746e-02  LinReg α by k=[0.0, 0.0]  BeamLinReg α by k=[0.0, 0.0]  ManifoldLinReg α by k=[0.0, 0.0]
+evaluated 9890 windows in 61.5s
+
+===== horizon k=1 (1 ms)  NMSE [dB] =====
+group              n_win       Persistence            LMMSE           Kalman       LinReg_eig      Poly2_blind       BeamLinReg   ManifoldLinReg         bscaI_k1           bsc_k1
+all                 9890            -10.50           -17.35           -15.98           -28.41           -23.36           -23.33           -35.28           -36.11           -36.88
+LOS                 6095            -10.48           -16.95           -15.26           -29.68           -23.36           -23.34           -35.44           -36.36           -37.20
+NLOS                3795            -10.55           -18.66           -18.85           -26.14           -23.35           -23.31           -34.89           -35.51           -36.12
+elev<50             4830            -10.44           -19.77           -20.25           -26.64           -23.25           -23.22           -34.92           -35.53           -36.27
+elev>=50            5060            -10.54           -16.15           -14.31           -30.45           -23.44           -23.42           -35.57           -36.61           -37.40
+clear@target        9890            -10.50           -17.35           -15.98           -28.41           -23.36           -23.33           -35.28           -36.11           -36.88
+  paired (episode bootstrap 10000x): Δ = NMSE(bscaI_k1) - NMSE(base), 음수 = RCG 우위
+    [all ] vs Persistence       Δ=-25.62 CI[-25.87,-25.37] * p=0.0000 wins 86/86
+    [all ] vs LMMSE             Δ=-18.77 CI[-19.39,-18.11] * p=0.0000 wins 86/86
+    [all ] vs Kalman            Δ=-20.14 CI[-20.91,-19.29] * p=0.0000 wins 86/86
+    [all ] vs LinReg_eig        Δ= -7.71 CI[ -8.23, -7.18] * p=0.0000 wins 86/86
+    [all ] vs Poly2_blind       Δ=-12.76 CI[-12.99,-12.54] * p=0.0000 wins 86/86
+    [all ] vs BeamLinReg        Δ=-12.78 CI[-13.02,-12.56] * p=0.0000 wins 86/86
+    [all ] vs ManifoldLinReg    Δ= -0.83 CI[ -1.02, -0.65] * p=0.0000 wins 78/86
+    [LOS ] vs Persistence       Δ=-25.88 CI[-26.22,-25.56] * p=0.0000 wins 53/53
+    [LOS ] vs LMMSE             Δ=-19.41 CI[-20.16,-18.65] * p=0.0000 wins 53/53
+    [LOS ] vs Kalman            Δ=-21.10 CI[-21.95,-20.20] * p=0.0000 wins 53/53
+    [LOS ] vs LinReg_eig        Δ= -6.68 CI[ -7.26, -6.16] * p=0.0000 wins 53/53
+    [LOS ] vs Poly2_blind       Δ=-13.00 CI[-13.32,-12.71] * p=0.0000 wins 53/53
+    [LOS ] vs BeamLinReg        Δ=-13.02 CI[-13.33,-12.73] * p=0.0000 wins 53/53
+    [LOS ] vs ManifoldLinReg    Δ= -0.92 CI[ -1.19, -0.68] * p=0.0000 wins 47/53
+    [NLOS] vs Persistence       Δ=-24.96 CI[-25.13,-24.78] * p=0.0000 wins 33/33
+    [NLOS] vs LMMSE             Δ=-16.85 CI[-17.56,-16.18] * p=0.0000 wins 33/33
+    [NLOS] vs Kalman            Δ=-16.66 CI[-17.77,-15.53] * p=0.0000 wins 33/33
+    [NLOS] vs LinReg_eig        Δ= -9.37 CI[-10.07, -8.64] * p=0.0000 wins 33/33
+    [NLOS] vs Poly2_blind       Δ=-12.16 CI[-12.31,-12.02] * p=0.0000 wins 33/33
+    [NLOS] vs BeamLinReg        Δ=-12.20 CI[-12.35,-12.06] * p=0.0000 wins 33/33
+    [NLOS] vs ManifoldLinReg    Δ= -0.62 CI[ -0.76, -0.48] * p=0.0000 wins 31/33
+  paired (episode bootstrap 10000x): Δ = NMSE(bsc_k1) - NMSE(base), 음수 = RCG 우위
+    [all ] vs Persistence       Δ=-26.38 CI[-26.66,-26.07] * p=0.0000 wins 86/86
+    [all ] vs LMMSE             Δ=-19.53 CI[-20.13,-18.91] * p=0.0000 wins 86/86
+    [all ] vs Kalman            Δ=-20.90 CI[-21.65,-20.08] * p=0.0000 wins 86/86
+    [all ] vs LinReg_eig        Δ= -8.47 CI[ -8.96, -7.98] * p=0.0000 wins 86/86
+    [all ] vs Poly2_blind       Δ=-13.52 CI[-13.77,-13.25] * p=0.0000 wins 86/86
+    [all ] vs BeamLinReg        Δ=-13.55 CI[-13.80,-13.28] * p=0.0000 wins 86/86
+    [all ] vs ManifoldLinReg    Δ= -1.60 CI[ -1.79, -1.39] * p=0.0000 wins 84/86
+    [LOS ] vs Persistence       Δ=-26.72 CI[-27.09,-26.31] * p=0.0000 wins 53/53
+    [LOS ] vs LMMSE             Δ=-20.25 CI[-20.96,-19.51] * p=0.0000 wins 53/53
+    [LOS ] vs Kalman            Δ=-21.94 CI[-22.76,-21.05] * p=0.0000 wins 53/53
+    [LOS ] vs LinReg_eig        Δ= -7.52 CI[ -8.06, -7.03] * p=0.0000 wins 53/53
+    [LOS ] vs Poly2_blind       Δ=-13.84 CI[-14.17,-13.48] * p=0.0000 wins 53/53
+    [LOS ] vs BeamLinReg        Δ=-13.86 CI[-14.19,-13.50] * p=0.0000 wins 53/53
+    [LOS ] vs ManifoldLinReg    Δ= -1.76 CI[ -2.02, -1.47] * p=0.0000 wins 51/53
+    [NLOS] vs Persistence       Δ=-25.56 CI[-25.85,-25.28] * p=0.0000 wins 33/33
+    [NLOS] vs LMMSE             Δ=-17.45 CI[-18.10,-16.86] * p=0.0000 wins 33/33
+    [NLOS] vs Kalman            Δ=-17.27 CI[-18.32,-16.22] * p=0.0000 wins 33/33
+    [NLOS] vs LinReg_eig        Δ= -9.98 CI[-10.66, -9.21] * p=0.0000 wins 33/33
+    [NLOS] vs Poly2_blind       Δ=-12.77 CI[-13.03,-12.52] * p=0.0000 wins 33/33
+    [NLOS] vs BeamLinReg        Δ=-12.81 CI[-13.07,-12.55] * p=0.0000 wins 33/33
+    [NLOS] vs ManifoldLinReg    Δ= -1.23 CI[ -1.41, -1.04] * p=0.0000 wins 33/33
+
+===== horizon k=16 (16 ms)  NMSE [dB] =====
+group              n_win       Persistence            LMMSE           Kalman       LinReg_eig      Poly2_blind       BeamLinReg   ManifoldLinReg        bscaI_k16          bsc_k16
+all                 9890              0.97            -4.33            -3.18           -13.80           -18.04           -13.35           -13.78           -19.44           -24.29
+LOS                 6095              1.89            -5.03            -2.81           -14.51           -18.20           -14.10           -14.61           -19.84           -25.67
+NLOS                3795             -3.59            -2.84            -4.42           -12.30           -17.61           -11.77           -12.08           -18.51           -21.87
+elev<50             4830             -5.25            -3.16            -5.68           -12.04           -17.75           -12.08           -12.41           -18.78           -23.05
+elev>=50            5060              2.87            -5.43            -1.99           -15.75           -18.26           -14.56           -15.13           -20.00           -25.48
+clear@target        9890              0.97            -4.33            -3.18           -13.80           -18.04           -13.35           -13.78           -19.44           -24.29
+  paired (episode bootstrap 10000x): Δ = NMSE(bscaI_k16) - NMSE(base), 음수 = RCG 우위
+    [all ] vs Persistence       Δ=-20.41 CI[-21.47,-19.28] * p=0.0000 wins 86/86
+    [all ] vs LMMSE             Δ=-15.11 CI[-16.02,-14.17] * p=0.0000 wins 86/86
+    [all ] vs Kalman            Δ=-16.26 CI[-17.39,-15.06] * p=0.0000 wins 83/86
+    [all ] vs LinReg_eig        Δ= -5.64 CI[ -6.12, -5.15] * p=0.0000 wins 85/86
+    [all ] vs Poly2_blind       Δ= -1.41 CI[ -1.93, -0.94] * p=0.0000 wins 65/86
+    [all ] vs BeamLinReg        Δ= -6.10 CI[ -6.57, -5.61] * p=0.0000 wins 86/86
+    [all ] vs ManifoldLinReg    Δ= -5.67 CI[ -6.17, -5.14] * p=0.0000 wins 86/86
+    [LOS ] vs Persistence       Δ=-21.73 CI[-23.02,-20.52] * p=0.0000 wins 53/53
+    [LOS ] vs LMMSE             Δ=-14.81 CI[-16.07,-13.55] * p=0.0000 wins 53/53
+    [LOS ] vs Kalman            Δ=-17.03 CI[-18.53,-15.54] * p=0.0000 wins 51/53
+    [LOS ] vs LinReg_eig        Δ= -5.33 CI[ -5.91, -4.73] * p=0.0000 wins 53/53
+    [LOS ] vs Poly2_blind       Δ= -1.64 CI[ -2.40, -1.01] * p=0.0000 wins 40/53
+    [LOS ] vs BeamLinReg        Δ= -5.74 CI[ -6.30, -5.22] * p=0.0000 wins 53/53
+    [LOS ] vs ManifoldLinReg    Δ= -5.23 CI[ -5.84, -4.66] * p=0.0000 wins 53/53
+    [NLOS] vs Persistence       Δ=-14.92 CI[-16.40,-12.93] * p=0.0000 wins 33/33
+    [NLOS] vs LMMSE             Δ=-15.67 CI[-16.77,-14.40] * p=0.0000 wins 33/33
+    [NLOS] vs Kalman            Δ=-14.09 CI[-15.19,-12.81] * p=0.0000 wins 32/33
+    [NLOS] vs LinReg_eig        Δ= -6.21 CI[ -7.01, -5.34] * p=0.0000 wins 32/33
+    [NLOS] vs Poly2_blind       Δ= -0.89 CI[ -1.42, -0.39] * p=0.0003 wins 25/33
+    [NLOS] vs BeamLinReg        Δ= -6.74 CI[ -7.57, -5.85] * p=0.0000 wins 33/33
+    [NLOS] vs ManifoldLinReg    Δ= -6.43 CI[ -7.30, -5.49] * p=0.0000 wins 33/33
+  paired (episode bootstrap 10000x): Δ = NMSE(bsc_k16) - NMSE(base), 음수 = RCG 우위
+    [all ] vs Persistence       Δ=-25.26 CI[-26.53,-23.93] * p=0.0000 wins 86/86
+    [all ] vs LMMSE             Δ=-19.96 CI[-20.85,-19.00] * p=0.0000 wins 86/86
+    [all ] vs Kalman            Δ=-21.11 CI[-22.32,-19.84] * p=0.0000 wins 86/86
+    [all ] vs LinReg_eig        Δ=-10.49 CI[-11.27, -9.65] * p=0.0000 wins 86/86
+    [all ] vs Poly2_blind       Δ= -6.25 CI[ -6.99, -5.52] * p=0.0000 wins 86/86
+    [all ] vs BeamLinReg        Δ=-10.94 CI[-11.59,-10.27] * p=0.0000 wins 86/86
+    [all ] vs ManifoldLinReg    Δ=-10.51 CI[-11.17, -9.83] * p=0.0000 wins 86/86
+    [LOS ] vs Persistence       Δ=-27.56 CI[-29.14,-25.95] * p=0.0000 wins 53/53
+    [LOS ] vs LMMSE             Δ=-20.64 CI[-21.98,-19.17] * p=0.0000 wins 53/53
+    [LOS ] vs Kalman            Δ=-22.86 CI[-24.53,-21.12] * p=0.0000 wins 53/53
+    [LOS ] vs LinReg_eig        Δ=-11.16 CI[-12.35, -9.83] * p=0.0000 wins 53/53
+    [LOS ] vs Poly2_blind       Δ= -7.47 CI[ -8.57, -6.29] * p=0.0000 wins 53/53
+    [LOS ] vs BeamLinReg        Δ=-11.57 CI[-12.51,-10.54] * p=0.0000 wins 53/53
+    [LOS ] vs ManifoldLinReg    Δ=-11.06 CI[-12.02,-10.02] * p=0.0000 wins 53/53
+    [NLOS] vs Persistence       Δ=-18.28 CI[-20.05,-15.97] * p=0.0000 wins 33/33
+    [NLOS] vs LMMSE             Δ=-19.03 CI[-20.05,-17.91] * p=0.0000 wins 33/33
+    [NLOS] vs Kalman            Δ=-17.44 CI[-18.45,-16.34] * p=0.0000 wins 33/33
+    [NLOS] vs LinReg_eig        Δ= -9.57 CI[-10.40, -8.74] * p=0.0000 wins 33/33
+    [NLOS] vs Poly2_blind       Δ= -4.25 CI[ -4.83, -3.75] * p=0.0000 wins 33/33
+    [NLOS] vs BeamLinReg        Δ=-10.10 CI[-10.89, -9.29] * p=0.0000 wins 33/33
+    [NLOS] vs ManifoldLinReg    Δ= -9.79 CI[-10.61, -8.94] * p=0.0000 wins 33/33
+
+[leak check] bscaI_k1 (trained k=1): T2 shuffled-target NMSE = 2.98 dB (정상: ~0dB 이상)
+  T3 output vs target at k' (최소가 학습 k여야 정상): k'=1:-36.1 k'=2:-26.1 k'=16:0.4
+
+[leak check] bsc_k1 (trained k=1): T2 shuffled-target NMSE = 2.97 dB (정상: ~0dB 이상)
+  T3 output vs target at k' (최소가 학습 k여야 정상): k'=1:-36.9 k'=2:-26.2 k'=16:0.4
+
+[leak check] bscaI_k16 (trained k=16): T2 shuffled-target NMSE = 2.97 dB (정상: ~0dB 이상)
+  T3 output vs target at k' (최소가 학습 k여야 정상): k'=1:0.5 k'=8:-2.8 k'=15:-16.1 k'=16:-19.4
+
+[leak check] bsc_k16 (trained k=16): T2 shuffled-target NMSE = 2.95 dB (정상: ~0dB 이상)
+  T3 output vs target at k' (최소가 학습 k여야 정상): k'=1:0.5 k'=8:-2.9 k'=15:-18.0 k'=16:-24.3
+
+Saved ./runs/eval_v9b_Tp20_bscaI_guard.json

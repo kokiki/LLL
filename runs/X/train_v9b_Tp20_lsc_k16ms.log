@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "C:\Users\ejko\CSI\260928\ntn_csi\train.py", line 177, in <module>
+    main()
+  File "C:\Users\ejko\CSI\260928\ntn_csi\train.py", line 113, in main
+    tr, va, te = (Split(a.data_root, s, a.sc_stride, dev, elev_range=a.elev_range) for s in ("train", "val", "test"))
+  File "C:\Users\ejko\CSI\260928\ntn_csi\train.py", line 113, in <genexpr>
+    tr, va, te = (Split(a.data_root, s, a.sc_stride, dev, elev_range=a.elev_range) for s in ("train", "val", "test"))
+  File "C:\Users\ejko\CSI\260928\ntn_csi\data.py", line 70, in __init__
+    raise FileNotFoundError(f"{d}: episode_*.mat 없음")
+FileNotFoundError: csi_dataset_FDD_DL_Kaband_Urban_SCS60kHz_dt1ms_v9b\val: episode_*.mat 없음

@@ -1,0 +1,8 @@
+train Split(E=186, n_sc=12, T=150, dt=1.0ms, NLOS=27, Tp_file=12, Tf_file=16)
+val Split(E=60, n_sc=12, T=150, dt=1.0ms, NLOS=16, Tp_file=12, Tf_file=16)
+test Split(E=68, n_sc=12, T=150, dt=1.0ms, NLOS=25, Tp_file=12, Tf_file=16)
+Tp=20 k=8 (8ms) windows: train=21390 val=6900 test=7820  load 1.5s  out=./runs/v9b_Tp20_bsc_k8ms_s43
+G=BeamShortcutUNet params=7,042,346  loss=MSE  phase_aug=True
+Epoch 1/100  Train -16.68dB  Val -22.69dB (smoothed -22.69)  148s  *best
+Epoch 2/100  Train -27.01dB  Val -24.35dB (smoothed -23.52)  233s  *best
+Epoch 3/100  Train -28.29dB  Val -26.35dB (smoothed -24.46)  232s  *best

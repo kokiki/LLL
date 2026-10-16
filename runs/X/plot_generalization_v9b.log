@@ -1,0 +1,3 @@
+k=4: train -34.87, train_nojump -34.87, val -32.70, val_nojump -32.70, test -32.71, test_nojump -32.71, guard -33.13, guard_nojump -33.13
+k=16: train -27.67, train_nojump -27.67, val -22.91, val_nojump -22.91, test -23.06, test_nojump -23.06, guard -24.29, guard_nojump -24.29
+saved

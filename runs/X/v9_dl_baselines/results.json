@@ -1,0 +1,194 @@
+[
+  {
+    "model": "lstm",
+    "horizon_ms": 1.0,
+    "tp": 20,
+    "val_nmse_db": -23.89688209977988,
+    "test_nmse_db": -11.046718158486126,
+    "params": 1381376
+  },
+  {
+    "model": "lstm",
+    "horizon_ms": 2.0,
+    "tp": 20,
+    "val_nmse_db": -23.16985820244579,
+    "test_nmse_db": -10.734281659900235,
+    "params": 1381376
+  },
+  {
+    "model": "lstm",
+    "horizon_ms": 4.0,
+    "tp": 20,
+    "val_nmse_db": -22.02579750675333,
+    "test_nmse_db": -11.220242505624775,
+    "params": 1381376
+  },
+  {
+    "model": "lstm",
+    "horizon_ms": 8.0,
+    "tp": 20,
+    "val_nmse_db": -19.633530613654532,
+    "test_nmse_db": -9.408006319209633,
+    "params": 1381376
+  },
+  {
+    "model": "lstm",
+    "horizon_ms": 12.0,
+    "tp": 20,
+    "val_nmse_db": -18.542153024816773,
+    "test_nmse_db": -9.500434553914793,
+    "params": 1381376
+  },
+  {
+    "model": "lstm",
+    "horizon_ms": 16.0,
+    "tp": 20,
+    "val_nmse_db": -17.260113273545244,
+    "test_nmse_db": -10.290340796224672,
+    "params": 1381376
+  },
+  {
+    "model": "gru",
+    "horizon_ms": 1.0,
+    "tp": 20,
+    "val_nmse_db": -25.915537565919067,
+    "test_nmse_db": -12.170076858751584,
+    "params": 1118208
+  },
+  {
+    "model": "gru",
+    "horizon_ms": 2.0,
+    "tp": 20,
+    "val_nmse_db": -24.956660252982402,
+    "test_nmse_db": -12.502556771607088,
+    "params": 1118208
+  },
+  {
+    "model": "gru",
+    "horizon_ms": 4.0,
+    "tp": 20,
+    "val_nmse_db": -22.66730820742375,
+    "test_nmse_db": -12.499652166760995,
+    "params": 1118208
+  },
+  {
+    "model": "gru",
+    "horizon_ms": 8.0,
+    "tp": 20,
+    "val_nmse_db": -20.692147764853193,
+    "test_nmse_db": -12.107049244775563,
+    "params": 1118208
+  },
+  {
+    "model": "gru",
+    "horizon_ms": 12.0,
+    "tp": 20,
+    "val_nmse_db": -19.15516551599445,
+    "test_nmse_db": -11.545266737371215,
+    "params": 1118208
+  },
+  {
+    "model": "gru",
+    "horizon_ms": 16.0,
+    "tp": 20,
+    "val_nmse_db": -17.472431097760854,
+    "test_nmse_db": -9.796088233081703,
+    "params": 1118208
+  },
+  {
+    "model": "lstmcnn",
+    "horizon_ms": 1.0,
+    "tp": 20,
+    "val_nmse_db": -24.082813929323194,
+    "test_nmse_db": -5.629928649924402,
+    "params": 1656386
+  },
+  {
+    "model": "lstmcnn",
+    "horizon_ms": 2.0,
+    "tp": 20,
+    "val_nmse_db": -23.254394752480444,
+    "test_nmse_db": -5.688762120854105,
+    "params": 1656386
+  },
+  {
+    "model": "lstmcnn",
+    "horizon_ms": 4.0,
+    "tp": 20,
+    "val_nmse_db": -22.58704983226105,
+    "test_nmse_db": -5.915930148090197,
+    "params": 1656386
+  },
+  {
+    "model": "lstmcnn",
+    "horizon_ms": 8.0,
+    "tp": 20,
+    "val_nmse_db": -19.807408053369763,
+    "test_nmse_db": -7.554296655204286,
+    "params": 1656386
+  },
+  {
+    "model": "lstmcnn",
+    "horizon_ms": 12.0,
+    "tp": 20,
+    "val_nmse_db": -18.50686338481799,
+    "test_nmse_db": -6.513882983319711,
+    "params": 1656386
+  },
+  {
+    "model": "lstmcnn",
+    "horizon_ms": 16.0,
+    "tp": 20,
+    "val_nmse_db": -17.039412166514452,
+    "test_nmse_db": -6.069587569302972,
+    "params": 1656386
+  },
+  {
+    "model": "transformer",
+    "horizon_ms": 1.0,
+    "tp": 20,
+    "val_nmse_db": -25.51231460507087,
+    "test_nmse_db": -11.313133506469304,
+    "params": 1915136
+  },
+  {
+    "model": "transformer",
+    "horizon_ms": 2.0,
+    "tp": 20,
+    "val_nmse_db": -24.995123895124323,
+    "test_nmse_db": -11.164417434129675,
+    "params": 1915136
+  },
+  {
+    "model": "transformer",
+    "horizon_ms": 4.0,
+    "tp": 20,
+    "val_nmse_db": -23.54681217295986,
+    "test_nmse_db": -10.461913178666084,
+    "params": 1915136
+  },
+  {
+    "model": "transformer",
+    "horizon_ms": 8.0,
+    "tp": 20,
+    "val_nmse_db": -21.19831020576421,
+    "test_nmse_db": -10.435596878450607,
+    "params": 1915136
+  },
+  {
+    "model": "transformer",
+    "horizon_ms": 12.0,
+    "tp": 20,
+    "val_nmse_db": -19.257702218565726,
+    "test_nmse_db": -11.686333528683338,
+    "params": 1915136
+  },
+  {
+    "model": "transformer",
+    "horizon_ms": 16.0,
+    "tp": 20,
+    "val_nmse_db": -18.061628269725855,
+    "test_nmse_db": -11.414514197860095,
+    "params": 1915136
+  }
+]

@@ -1,0 +1,16 @@
+train Split(E=186, n_sc=12, T=150, dt=1.0ms, NLOS=27, Tp_file=12, Tf_file=16)
+val Split(E=60, n_sc=12, T=150, dt=1.0ms, NLOS=16, Tp_file=12, Tf_file=16)
+test Split(E=68, n_sc=12, T=150, dt=1.0ms, NLOS=25, Tp_file=12, Tf_file=16)
+Tp=20 k=2 (2ms) windows: train=21390 val=6900 test=7820  load 1.2s  out=./runs/v9_Tp20_beam_k2ms_s43
+G=BeamShortcutUNet params=7,042,346  loss=MSE  phase_aug=True
+Epoch 1/100  Train -16.60dB  Val -24.51dB (smoothed -24.51)  113s  *best
+Epoch 2/100  Train -27.96dB  Val -24.98dB (smoothed -24.74)  110s  *best
+Epoch 3/100  Train -29.12dB  Val -27.14dB (smoothed -25.54)  109s  *best
+Epoch 4/100  Train -29.70dB  Val -27.49dB (smoothed -26.54)  110s  *best
+Epoch 5/100  Train -30.09dB  Val -27.87dB (smoothed -27.50)  132s  *best
+Epoch 6/100  Train -30.46dB  Val -28.08dB (smoothed -27.81)  180s  *best
+Epoch 7/100  Train -30.60dB  Val -28.06dB (smoothed -28.00)  127s  *best
+Epoch 8/100  Train -30.75dB  Val -27.94dB (smoothed -28.02)  109s  *best
+Epoch 9/100  Train -31.09dB  Val -28.01dB (smoothed -28.00)  109s
+Epoch 10/100  Train -31.03dB  Val -28.19dB (smoothed -28.04)  109s  *best
+Epoch 11/100  Train -30.82dB  Val -28.38dB (smoothed -28.19)  110s  *best

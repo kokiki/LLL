@@ -1,0 +1,7 @@
+
+===== (1) paired: Δ = NMSE(BSCIS) - NMSE(BSCI)  [dB], 에피소드 bootstrap 10000x =====
+  k=16 all   BSCIS= -24.47 BSCI= -24.55  Δ=+0.09 CI[+0.00,+0.17] x wins 37/86
+  k=16 LOS   BSCIS= -25.99 BSCI= -26.02  Δ=+0.03 CI[-0.08,+0.14]   wins 28/53
+  k=16 NLOS  BSCIS= -21.88 BSCI= -22.03  Δ=+0.15 CI[+0.02,+0.29] x wins 9/33
+
+Saved ./runs/compare_bscIS_bscI_guard.json

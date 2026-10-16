@@ -1,0 +1,22 @@
+
+===== (1) paired: Δ = NMSE(BSCI) - NMSE(BSC)  [dB], 에피소드 bootstrap 10000x =====
+  k= 1 all   BSCI= -36.86 BSC= -36.54  Δ=-0.32 CI[-0.41,-0.23] * wins 57/68
+  k= 1 LOS   BSCI= -37.44 BSC= -36.98  Δ=-0.46 CI[-0.53,-0.39] * wins 41/43
+  k= 1 NLOS  BSCI= -35.43 BSC= -35.40  Δ=-0.04 CI[-0.20,+0.14]   wins 16/25
+  k= 2 all   BSCI= -35.42 BSC= -35.26  Δ=-0.16 CI[-0.28,-0.05] * wins 43/68
+  k= 2 LOS   BSCI= -36.09 BSC= -35.79  Δ=-0.29 CI[-0.41,-0.18] * wins 34/43
+  k= 2 NLOS  BSCI= -33.84 BSC= -33.93  Δ=+0.09 CI[-0.14,+0.31]   wins 9/25
+  k= 4 all   BSCI= -33.10 BSC= -32.71  Δ=-0.39 CI[-0.52,-0.26] * wins 57/68
+  k= 4 LOS   BSCI= -33.89 BSC= -33.53  Δ=-0.36 CI[-0.48,-0.25] * wins 38/43
+  k= 4 NLOS  BSCI= -31.31 BSC= -30.86  Δ=-0.45 CI[-0.74,-0.16] * wins 19/25
+  k= 8 all   BSCI= -29.26 BSC= -28.86  Δ=-0.40 CI[-0.52,-0.28] * wins 59/68
+  k= 8 LOS   BSCI= -30.64 BSC= -30.13  Δ=-0.51 CI[-0.64,-0.37] * wins 41/43
+  k= 8 NLOS  BSCI= -26.62 BSC= -26.36  Δ=-0.26 CI[-0.46,-0.07] * wins 18/25
+  k=12 all   BSCI= -25.92 BSC= -25.68  Δ=-0.24 CI[-0.41,-0.06] * wins 49/68
+  k=12 LOS   BSCI= -27.75 BSC= -27.33  Δ=-0.42 CI[-0.61,-0.23] * wins 34/43
+  k=12 NLOS  BSCI= -22.79 BSC= -22.73  Δ=-0.05 CI[-0.31,+0.23]   wins 15/25
+  k=16 all   BSCI= -23.42 BSC= -23.06  Δ=-0.36 CI[-0.57,-0.13] * wins 57/68
+  k=16 LOS   BSCI= -25.62 BSC= -24.95  Δ=-0.67 CI[-0.89,-0.46] * wins 40/43
+  k=16 NLOS  BSCI= -19.96 BSC= -19.88  Δ=-0.08 CI[-0.39,+0.28]   wins 17/25
+
+Saved ./runs/compare_bscI_bsc_test.json

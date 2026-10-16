@@ -1,0 +1,106 @@
+train Split(E=186, n_sc=12, T=150, dt=1.0ms, NLOS=27, Tp_file=12, Tf_file=16)
+val Split(E=60, n_sc=12, T=150, dt=1.0ms, NLOS=16, Tp_file=12, Tf_file=16)
+test Split(E=68, n_sc=12, T=150, dt=1.0ms, NLOS=25, Tp_file=12, Tf_file=16)
+Tp=20 k=8 (8ms) windows: train=21390 val=6900 test=7820  load 0.7s  out=./runs/v9_Tp20_k8ms_s43
+G=LinearShortcutUNet params=7,001,426  loss=MSE  phase_aug=True
+Epoch 1/100  Train -15.48dB  Val -18.87dB (smoothed -18.87)  51s  *best
+Epoch 2/100  Train -21.82dB  Val -19.79dB (smoothed -19.33)  49s  *best
+Epoch 3/100  Train -22.64dB  Val -20.30dB (smoothed -19.65)  49s  *best
+Epoch 4/100  Train -23.02dB  Val -20.50dB (smoothed -20.20)  48s  *best
+Epoch 5/100  Train -23.29dB  Val -20.40dB (smoothed -20.40)  48s  *best
+Epoch 6/100  Train -23.49dB  Val -20.62dB (smoothed -20.50)  49s  *best
+Epoch 7/100  Train -23.63dB  Val -20.76dB (smoothed -20.59)  48s  *best
+Epoch 8/100  Train -23.77dB  Val -20.63dB (smoothed -20.67)  49s  *best
+Epoch 9/100  Train -23.89dB  Val -20.55dB (smoothed -20.65)  48s
+Epoch 10/100  Train -23.99dB  Val -20.78dB (smoothed -20.65)  49s
+Epoch 11/100  Train -24.07dB  Val -20.82dB (smoothed -20.72)  49s  *best
+Epoch 12/100  Train -24.16dB  Val -20.82dB (smoothed -20.81)  49s  *best
+Epoch 13/100  Train -24.23dB  Val -20.49dB (smoothed -20.71)  48s
+Epoch 14/100  Train -24.32dB  Val -20.41dB (smoothed -20.58)  49s
+Epoch 15/100  Train -24.34dB  Val -20.89dB (smoothed -20.60)  49s
+Epoch 16/100  Train -24.41dB  Val -20.85dB (smoothed -20.72)  49s
+Epoch 17/100  Train -24.46dB  Val -20.95dB (smoothed -20.90)  96s  *best
+Epoch 18/100  Train -24.53dB  Val -20.90dB (smoothed -20.90)  91s  *best
+Epoch 19/100  Train -24.57dB  Val -19.96dB (smoothed -20.60)  101s
+Epoch 20/100  Train -24.59dB  Val -21.01dB (smoothed -20.62)  91s
+Epoch 21/100  Train -24.66dB  Val -20.98dB (smoothed -20.65)  70s
+Epoch 22/100  Train -24.68dB  Val -20.52dB (smoothed -20.84)  49s
+Epoch 23/100  Train -24.72dB  Val -20.41dB (smoothed -20.64)  48s
+Epoch 24/100  Train -24.77dB  Val -21.03dB (smoothed -20.65)  48s
+Epoch 25/100  Train -24.80dB  Val -21.10dB (smoothed -20.84)  48s
+Epoch 26/100  Train -24.84dB  Val -21.27dB (smoothed -21.13)  49s  *best
+Epoch 27/100  Train -24.84dB  Val -21.10dB (smoothed -21.16)  48s  *best
+Epoch 28/100  Train -24.89dB  Val -21.17dB (smoothed -21.18)  48s  *best
+Epoch 29/100  Train -24.91dB  Val -21.19dB (smoothed -21.15)  48s
+Epoch 30/100  Train -24.94dB  Val -21.22dB (smoothed -21.19)  48s  *best
+Epoch 31/100  Train -24.96dB  Val -20.70dB (smoothed -21.04)  48s
+Epoch 32/100  Train -24.97dB  Val -21.26dB (smoothed -21.06)  48s
+Epoch 33/100  Train -25.01dB  Val -21.30dB (smoothed -21.09)  48s
+Epoch 34/100  Train -25.01dB  Val -21.28dB (smoothed -21.28)  48s  *best
+Epoch 35/100  Train -25.05dB  Val -21.21dB (smoothed -21.27)  48s
+Epoch 36/100  Train -25.05dB  Val -21.27dB (smoothed -21.26)  48s
+Epoch 37/100  Train -25.09dB  Val -21.00dB (smoothed -21.16)  48s
+Epoch 38/100  Train -25.09dB  Val -21.34dB (smoothed -21.21)  49s
+Epoch 39/100  Train -25.13dB  Val -21.32dB (smoothed -21.22)  48s
+Epoch 40/100  Train -25.11dB  Val -21.27dB (smoothed -21.31)  48s  *best
+Epoch 41/100  Train -25.15dB  Val -21.21dB (smoothed -21.27)  48s
+Epoch 42/100  Train -25.18dB  Val -21.22dB (smoothed -21.23)  48s
+Epoch 43/100  Train -25.19dB  Val -21.33dB (smoothed -21.25)  49s
+Epoch 44/100  Train -25.11dB  Val -21.37dB (smoothed -21.31)  48s
+Epoch 45/100  Train -25.24dB  Val -21.43dB (smoothed -21.38)  48s  *best
+Epoch 46/100  Train -25.22dB  Val -21.41dB (smoothed -21.40)  49s  *best
+Epoch 47/100  Train -25.22dB  Val -21.39dB (smoothed -21.41)  50s  *best
+Epoch 48/100  Train -25.22dB  Val -21.35dB (smoothed -21.38)  49s
+Epoch 49/100  Train -25.26dB  Val -21.41dB (smoothed -21.38)  49s
+Epoch 50/100  Train -25.23dB  Val -21.40dB (smoothed -21.39)  49s
+Epoch 51/100  Train -25.31dB  Val -21.38dB (smoothed -21.40)  73s
+Epoch 52/100  Train -25.25dB  Val -21.44dB (smoothed -21.41)  74s
+Epoch 53/100  Train -25.30dB  Val -21.19dB (smoothed -21.34)  49s
+Epoch 54/100  Train -25.30dB  Val -20.99dB (smoothed -21.21)  48s
+Epoch 55/100  Train -25.27dB  Val -21.31dB (smoothed -21.16)  48s
+Epoch 56/100  Train -25.31dB  Val -21.48dB (smoothed -21.26)  48s
+Epoch 57/100  Train -25.33dB  Val -21.47dB (smoothed -21.42)  51s  *best
+Epoch 58/100  Train -25.33dB  Val -21.48dB (smoothed -21.48)  56s  *best
+Epoch 59/100  Train -25.32dB  Val -21.55dB (smoothed -21.50)  51s  *best
+Epoch 60/100  Train -25.34dB  Val -21.45dB (smoothed -21.49)  50s
+Epoch 61/100  Train -25.39dB  Val -21.58dB (smoothed -21.53)  50s  *best
+Epoch 62/100  Train -25.35dB  Val -21.46dB (smoothed -21.50)  52s
+Epoch 63/100  Train -25.36dB  Val -21.46dB (smoothed -21.50)  48s
+Epoch 64/100  Train -25.39dB  Val -21.40dB (smoothed -21.44)  48s
+Epoch 65/100  Train -25.40dB  Val -21.56dB (smoothed -21.48)  49s
+Epoch 66/100  Train -25.42dB  Val -21.30dB (smoothed -21.42)  49s
+Epoch 67/100  Train -25.41dB  Val -21.54dB (smoothed -21.47)  48s
+Epoch 68/100  Train -25.40dB  Val -21.31dB (smoothed -21.38)  48s
+Epoch 69/100  Train -25.42dB  Val -21.55dB (smoothed -21.47)  49s
+Epoch 70/100  Train -25.44dB  Val -21.29dB (smoothed -21.39)  49s
+Epoch 71/100  Train -25.38dB  Val -21.54dB (smoothed -21.46)  48s
+Epoch 72/100  Train -25.43dB  Val -21.57dB (smoothed -21.47)  49s
+Epoch 73/100  Train -25.44dB  Val -21.50dB (smoothed -21.53)  50s  *best
+Epoch 74/100  Train -25.45dB  Val -20.62dB (smoothed -21.23)  49s
+Epoch 75/100  Train -25.45dB  Val -21.41dB (smoothed -21.17)  49s
+Epoch 76/100  Train -25.46dB  Val -21.33dB (smoothed -21.12)  49s
+Epoch 77/100  Train -25.48dB  Val -21.38dB (smoothed -21.37)  49s
+Epoch 78/100  Train -25.49dB  Val -21.59dB (smoothed -21.43)  48s
+Epoch 79/100  Train -25.49dB  Val -21.45dB (smoothed -21.47)  49s
+Epoch 80/100  Train -25.51dB  Val -21.50dB (smoothed -21.52)  49s
+Epoch 81/100  Train -25.47dB  Val -21.59dB (smoothed -21.51)  49s
+Epoch 82/100  Train -25.49dB  Val -21.51dB (smoothed -21.53)  49s
+Epoch 83/100  Train -25.50dB  Val -21.51dB (smoothed -21.54)  49s  *best
+Epoch 84/100  Train -25.50dB  Val -21.45dB (smoothed -21.49)  48s
+Epoch 85/100  Train -25.53dB  Val -21.42dB (smoothed -21.46)  49s
+Epoch 86/100  Train -25.52dB  Val -21.41dB (smoothed -21.43)  48s
+Epoch 87/100  Train -25.52dB  Val -21.53dB (smoothed -21.45)  48s
+Epoch 88/100  Train -25.54dB  Val -21.58dB (smoothed -21.51)  49s
+Epoch 89/100  Train -25.52dB  Val -21.48dB (smoothed -21.53)  49s
+Epoch 90/100  Train -25.53dB  Val -21.52dB (smoothed -21.53)  48s
+Epoch 91/100  Train -25.53dB  Val -21.58dB (smoothed -21.53)  48s
+Epoch 92/100  Train -25.55dB  Val -21.34dB (smoothed -21.48)  48s
+Epoch 93/100  Train -25.53dB  Val -21.58dB (smoothed -21.50)  49s
+Epoch 94/100  Train -25.54dB  Val -21.59dB (smoothed -21.51)  48s
+Epoch 95/100  Train -25.54dB  Val -21.54dB (smoothed -21.57)  48s  *best
+Epoch 96/100  Train -25.58dB  Val -21.14dB (smoothed -21.42)  48s
+Epoch 97/100  Train -25.54dB  Val -21.53dB (smoothed -21.41)  48s
+Epoch 98/100  Train -25.57dB  Val -21.57dB (smoothed -21.41)  48s
+Epoch 99/100  Train -25.57dB  Val -21.64dB (smoothed -21.58)  48s  *best
+Epoch 100/100  Train -25.56dB  Val -21.58dB (smoothed -21.60)  48s  *best
+Test NMSE: -20.24 dB  (best smoothed val -21.60 dB)

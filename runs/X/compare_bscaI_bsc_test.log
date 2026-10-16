@@ -1,0 +1,10 @@
+
+===== (1) paired: Δ = NMSE(BSCAI) - NMSE(BSC)  [dB], 에피소드 bootstrap 10000x =====
+  k= 1 all   BSCAI= -35.86 BSC= -36.54  Δ=+0.68 CI[+0.47,+0.87] x wins 12/68
+  k= 1 LOS   BSCAI= -36.03 BSC= -36.98  Δ=+0.95 CI[+0.77,+1.14] x wins 1/43
+  k= 1 NLOS  BSCAI= -35.36 BSC= -35.40  Δ=+0.04 CI[-0.37,+0.40]   wins 11/25
+  k=16 all   BSCAI= -18.91 BSC= -23.06  Δ=+4.15 CI[+3.28,+5.06] x wins 4/68
+  k=16 LOS   BSCAI= -19.29 BSC= -24.95  Δ=+5.67 CI[+4.60,+6.75] x wins 1/43
+  k=16 NLOS  BSCAI= -17.92 BSC= -19.88  Δ=+1.96 CI[+1.01,+2.97] x wins 3/25
+
+Saved ./runs/compare_bscaI_bsc_test.json
