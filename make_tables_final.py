@@ -6,13 +6,13 @@ make_tables_final.py -- 최종 결과표 (제안 모델 BSC-UNet-P, v9b) -> resu
   표 4  ablation (test·guard): 선형 지름길만 / 2차 외삽 지름길만 (학습 없음) / 선형 지름길 + UNet (BSC-UNet-I) / 제안
   표 5  Doppler 변화율 스케일 κ 민감도 (k = 1, 16; test·guard)
   표 6  방위각 일반화 시험 (한계)
-입력: runs/eval_v9b_final_{short,long}_{test,guard}.json (baseline 8종 + bscP + bscI),
+입력: runs/eval_v9b_final_short_{test,guard}.json (baseline 8종 + bscP + bscI, k = 1–16),
       runs/eval_v9b_bscP{,_kappa1}_{test,guard}.json (κ 민감도), runs/eval_bearing_v9b_final.json
 """
 import json
 import os
 
-KS = [1, 2, 4, 8, 12, 16, 24, 32]
+KS = [1, 2, 4, 8, 12, 16]                     # k = 24, 32는 학습하지 않음
 BASE7 = ["Persistence", "LMMSE", "Kalman", "LinReg_eig", "Poly2_blind", "BeamLinReg", "ManifoldLinReg"]
 SHORT = {"Poly2_blind": "Poly2", "ManifoldLinReg": "ManifoldLinReg", "LinReg_eig": "LinReg"}
 
@@ -49,7 +49,7 @@ def main_rows(G, P, grp="all"):
 def write():
     L = []
     w = L.append
-    T = {s: load([f"runs/eval_v9b_final_short_{s}.json", f"runs/eval_v9b_final_long_{s}.json"]) for s in ("test", "guard")}
+    T = {s: load([f"runs/eval_v9b_final_short_{s}.json"]) for s in ("test", "guard")}
     G, P = T["test"]
     rows = main_rows(G, P)
     w("# 최종 결과표 (제안 모델 BSC-UNet-P)\n")
