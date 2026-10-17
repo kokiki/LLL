@@ -27,7 +27,7 @@ import time
 import numpy as np
 import torch
 
-from data import Split, Windows, phase_augment, to_model_io
+from data import Split, Windows, phase_augment, rescale_doppler_rate, to_model_io
 
 
 def array_resp(B, device, gen=None):
@@ -59,7 +59,7 @@ def dir_augment(inp, tgt, gen=None):
         re, im = z[:, :, 0], z[:, :, 1]
         return torch.stack([re * c - im * s, re * s + im * c], 2).reshape(n, 2 * F, H, W)
     return rot(inp, C // 2), rot(tgt, tgt.shape[1] // 2)
-from csi_models import BeamAlignedUNet, BeamShortcutUNet, GeneratorUNet
+from csi_models import BeamAlignedUNet, BeamShortcutPolyUNet, BeamShortcutUNet, GeneratorUNet
 
 
 def parse_args():
@@ -74,6 +74,8 @@ def parse_args():
     ap.add_argument("--lambda_cycle", type=float, default=0.3)
     ap.add_argument("--no_shortcut", action="store_true", help="ablation: 선형 지름길 없는 순수 UNet")
     ap.add_argument("--aligned", action="store_true", help="BSC-UNet-A: 빔 정렬 좌표 UNet + replicate 패딩 (가장자리 효과 완화)")
+    ap.add_argument("--poly_shortcut", action="store_true",
+                    help="BSC-UNet-P: 빔 지름길에 빔계수 위상 2차/진폭 1차 외삽(ManifoldPoly2와 같은 식)을 더함 (Doppler 변화율 2차 위상 대응)")
     ap.add_argument("--sym_out", action="store_true", help="BSC-UNet UNet 출력층을 대칭 구조로 (맨 윗행 가장자리 오차 완화)")
     ap.add_argument("--pad_replicate", action="store_true", help="BSC-UNet UNet 모든 합성곱 패딩을 replicate로 (가장자리 오차 완화)")
     ap.add_argument("--no_phase_aug", action="store_true")
@@ -98,6 +100,8 @@ def parse_args():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out_dir", default=None)
     ap.add_argument("--elev_range", type=float, nargs=2, default=None, help="모든 split을 이 고각 범위로 제한 (smoke/비교용)")
+    ap.add_argument("--doppler_rate_kappa", type=float, default=None,
+                    help="v9b Doppler 변화율 잔차 스케일을 κ=0.155에서 이 값으로 바꿔 사용 (1 = 실제 변화율, 민감도 실험용)")
     return ap.parse_args()
 
 
@@ -157,6 +161,9 @@ def main():
     torch.backends.cudnn.benchmark = True
     t0 = time.time()
     tr, va, te = (Split(a.data_root, s, a.sc_stride, dev, elev_range=a.elev_range) for s in ("train", "val", "test"))
+    if a.doppler_rate_kappa is not None:                                  # Doppler 변화율 스케일 민감도 (v9b 전용)
+        for sp in (tr, va, te):
+            rescale_doppler_rate(sp, a.doppler_rate_kappa)
     Tp = a.Tp or tr.Tp_file
     k = int(round(a.horizon_ms / tr.dt_ms))
     Tf = max(k, tr.Tf_file)
@@ -172,9 +179,17 @@ def main():
     gkw = {"sym_out": True} if a.sym_out else {}
     if a.pad_replicate:
         gkw["pad_mode"] = "replicate"
-    G = Gcls(2 * Tp, 2, dropout=a.dropout, n_bottleneck_layers=a.n_bottleneck_layers, **gkw).to(dev)
+    if a.poly_shortcut:
+        Gcls = BeamShortcutPolyUNet
+        G = Gcls(2 * Tp, k, 2, dropout=a.dropout, n_bottleneck_layers=a.n_bottleneck_layers).to(dev)
+    else:
+        G = Gcls(2 * Tp, 2, dropout=a.dropout, n_bottleneck_layers=a.n_bottleneck_layers, **gkw).to(dev)
     opt = torch.optim.Adam(G.parameters(), lr=a.lr, betas=(a.beta1, 0.999))
-    sched = (torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.cosine_epochs, eta_min=a.lr_min)
+    # cosine: epoch e(0부터)에서 lr = lr_min + (lr - lr_min)(1 + cos(π e / cosine_epochs))/2, e >= cosine_epochs이면 lr_min 유지
+    # (PyTorch CosineAnnealingLR은 T_max 이후 다시 증가하므로 사용하지 않음)
+    rmin = a.lr_min / a.lr
+    sched = (torch.optim.lr_scheduler.LambdaLR(
+        opt, lambda e: rmin + (1 - rmin) * 0.5 * (1 + math.cos(math.pi * min(e, a.cosine_epochs) / a.cosine_epochs)))
              if a.lr_sched == "cosine" else None)
     if a.ema > 0:
         from torch.optim.swa_utils import AveragedModel, get_ema_multi_avg_fn
@@ -192,7 +207,7 @@ def main():
     logf = os.path.join(out, "log.csv")
     with open(logf, "w", newline="") as f:
         csv.writer(f).writerow(["epoch", "train_nmse_db", "val_nmse_db", "val_smoothed_db"])
-    best, best_raw, bad, hist = float("inf"), None, 0, collections.deque(maxlen=a.val_smooth)
+    best, best_raw, bad, hist, best_ep = float("inf"), None, 0, collections.deque(maxlen=a.val_smooth), 0
     for ep in range(1, a.epochs + 1):
         G.train(); t1 = time.time()
         tn = torch.zeros((), device=dev); td = torch.zeros((), device=dev)
@@ -224,7 +239,7 @@ def main():
         with open(logf, "a", newline="") as f:
             csv.writer(f).writerow([ep, f"{tr_db:.4f}", f"{v:.4f}", f"{sm:.4f}"])
         if sm < best:
-            best, best_raw, bad = sm, v, 0
+            best, best_raw, bad, best_ep = sm, v, 0, ep
             torch.save(G_eval().state_dict(), os.path.join(out, "best_G.pt")); msg += "  *best"
         else:
             bad += 1
@@ -234,8 +249,10 @@ def main():
     G.load_state_dict(torch.load(os.path.join(out, "best_G.pt"), weights_only=True))
     test_db = nmse_db(G, W["test"], k)                                       # (EMA 사용 시 best_G.pt = EMA 가중치)
     print(f"Test NMSE: {test_db:.2f} dB  (best smoothed val {best:.2f} dB)", flush=True)
-    json.dump({"test_nmse_db": test_db, "best_val_smoothed_db": best, "best_val_raw_db": best_raw, "epochs": ep,
-               "horizon_ms": a.horizon_ms, "k": k, "Tp": Tp, "dt_ms": tr.dt_ms, **vars(a)},
+    # vars(a)의 "epochs"(최대 epoch 인자)가 실제 값을 덮어쓰지 않도록 실제 학습 epoch·best epoch는 별도 키로 기록
+    json.dump({"test_nmse_db": test_db, "best_val_smoothed_db": best, "best_val_raw_db": best_raw,
+               "horizon_ms": a.horizon_ms, "k": k, "Tp": Tp, "dt_ms": tr.dt_ms, **vars(a),
+               "epochs_trained": ep, "best_epoch": best_ep},
               open(os.path.join(out, "result.json"), "w"), indent=2)
 
 

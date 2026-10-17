@@ -85,6 +85,19 @@ def fix_timing_jumps(X: torch.Tensor, sc_idx, max_shift: int = 10, margin: float
     return (X * corr[..., None].to(X.dtype)), torch.cat([torch.zeros_like(dlt[:, :1]), dlt], 1).long()
 
 
+V9B_DOPPLER_RATE_SCALE = 0.1550556013060905     # v9b 생성기 globalDopplerRateScale (κ, 모든 에피소드 공통)
+
+
+def rescale_doppler_rate(sp, kappa_to: float, kappa_from: float = V9B_DOPPLER_RATE_SCALE):
+    """Doppler 변화율 잔차의 스케일을 κ_from -> κ_to로 바꾼다 (재생성 없이, 민감도 실험용).
+    생성기가 곱한 2차 위상 exp(jπ ḟ t²) (ḟ = κ_from ḟ_raw)에 exp(jπ ḟ (κ_to/κ_from − 1) t²)를 추가로 곱한다.
+    모든 안테나·부반송파에 공통인 위상이라 정확하다 (관측 슬롯 안 시각 오프셋은 선형 위상 항이라 로더의 회전 제거로 사라짐)."""
+    fdd = torch.as_tensor(sp.meta["fDdot_sat"].astype(np.float64), device=sp.X.device)
+    t = torch.arange(sp.T, device=sp.X.device, dtype=torch.float64) * sp.dt_ms * 1e-3
+    ph = math.pi * (fdd * (kappa_to / kappa_from - 1))[:, None] * t[None, :] ** 2
+    sp.X = sp.X * torch.exp(1j * ph).to(sp.X.dtype)[:, None, :, None]
+
+
 class Split:
     """split 폴더 하나의 모든 에피소드 (GPU 상주).
     fix_timing=True (기본): v9 생성기의 타이밍 기준 점프를 로드 시 보정 (fix_timing_jumps). False = 원본 그대로."""

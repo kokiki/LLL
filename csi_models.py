@@ -187,12 +187,14 @@ def _beam_shortcut(model, Hc):
 
 class BeamShortcutUNet(nn.Module):
     """BSC-UNet (제안 모델). sym_out / pad_mode="replicate"는 ablation 옵션 (각각 sym_out_flag / replicate_flag 버퍼로 표시)."""
+    extra_in = 0                                              # 하위 클래스가 UNet 입력 채널을 추가할 때 사용
+
     def __init__(self, in_channels, out_channels=2, dropout=0.5, n_bottleneck_layers=3, sym_out=False, pad_mode="zeros"):
         super().__init__()
         assert out_channels == 2
         self.Tp = in_channels // 2
-        self.unet = GeneratorUNet(2 * in_channels, out_channels, dropout=dropout, n_bottleneck_layers=n_bottleneck_layers,
-                                  sym_out=sym_out, pad_mode=pad_mode)
+        self.unet = GeneratorUNet(2 * in_channels + self.extra_in, out_channels, dropout=dropout,
+                                  n_bottleneck_layers=n_bottleneck_layers, sym_out=sym_out, pad_mode=pad_mode)
         if sym_out:
             self.register_buffer("sym_out_flag", torch.ones(1))
         if pad_mode == "replicate":
@@ -205,6 +207,49 @@ class BeamShortcutUNet(nn.Module):
         a, s, lin = _beam_shortcut(self, Hc)
         proj = _to_real(s[:, :, None, None] * a[:, None])    # 빔 투영(노이즈 제거) history
         return self.unet(torch.cat([x, proj], 1)) + lin
+
+
+def poly2_extrapolate(s: torch.Tensor, k: int) -> torch.Tensor:
+    """s (N, Tp) 복소 빔계수 history -> t = k 외삽값 (N,). 위상: 인접 차분 wrap 후 누적(unwrap) -> 2차 최소제곱,
+    진폭: 1차 최소제곱 (>= 0). baselines.py Poly2_blind / ManifoldPoly2와 같은 식 (시간축 o = -(Tp-1)..0, 예측 o = k)."""
+    Tp = s.shape[-1]
+    s64 = s.to(torch.complex128)
+    t = torch.arange(Tp, device=s.device, dtype=torch.float64) - (Tp - 1)
+    tk = torch.tensor([float(k)], device=s.device, dtype=torch.float64)
+    ang = torch.angle(s64)
+    dd = torch.remainder(ang[:, 1:] - ang[:, :-1] + math.pi, 2 * math.pi) - math.pi
+    ph = torch.cat([ang[:, :1], ang[:, :1] + torch.cumsum(dd, -1)], -1)
+    V = lambda x, deg: torch.stack([x ** i for i in range(deg, -1, -1)], -1)
+    amp = torch.clamp((s64.abs() @ torch.linalg.pinv(V(t, 1)).T) @ V(tk, 1).T, min=0)[:, 0]
+    phk = ((ph @ torch.linalg.pinv(V(t, 2)).T) @ V(tk, 2).T)[:, 0]
+    return (amp * torch.exp(1j * phk)).to(s.dtype)
+
+
+class BeamShortcutPolyUNet(BeamShortcutUNet):
+    """BSC-UNet-P: BSC-UNet + 2차 위상 외삽 빔 지름길. Doppler 변화율 잔차가 만드는 에피소드별 2차 위상은 고정 선형 필터로
+    외삽할 수 없으므로, 빔계수 history s의 위상 2차/진폭 1차 외삽값 s_poly(k)(학습 없음)를 지름길에 더한다.
+      지름길 ŝ = Σ_l w_l s(l) + c·s_poly   (w: 0 초기화, c: 복소 이득 1 초기화 -> 시작점 = ManifoldPoly2)
+      UNet 입력 = [x, s·a (Tp 프레임), s_poly·a (1 프레임)],  출력 = UNet + ŝ·a
+    horizon k(스텝)는 구조의 일부라 poly_k 버퍼로 저장. poly_flag 버퍼로 표시."""
+    extra_in = 2
+
+    def __init__(self, in_channels, k_steps, out_channels=2, dropout=0.5, n_bottleneck_layers=3):
+        super().__init__(in_channels, out_channels, dropout=dropout, n_bottleneck_layers=n_bottleneck_layers)
+        self.c_re = nn.Parameter(torch.ones(1))
+        self.c_im = nn.Parameter(torch.zeros(1))
+        self.register_buffer("poly_flag", torch.ones(1))
+        self.register_buffer("poly_k", torch.tensor([float(k_steps)]))
+
+    def forward(self, x):
+        Hc = _to_complex(x)
+        a = manifold_beam(Hc)
+        s = torch.einsum("ntij,nij->nt", Hc, a.conj())
+        s_poly = poly2_extrapolate(s.detach(), int(self.poly_k.item()))
+        s_hat = s @ torch.complex(self.w_re, self.w_im) + torch.complex(self.c_re, self.c_im) * s_poly
+        lin = _to_real((s_hat[:, None, None] * a)[:, None])
+        proj = _to_real(s[:, :, None, None] * a[:, None])
+        proj_poly = _to_real((s_poly[:, None, None] * a)[:, None])
+        return self.unet(torch.cat([x, proj, proj_poly], 1)) + lin
 
 
 class BeamAlignedUNet(nn.Module):
@@ -235,6 +280,8 @@ def build_model_from_state_dict(sd, Tp, dropout=0.5):
     """체크포인트 키로 구조 판별 -> 생성 (가중치는 호출 측에서 load_state_dict)."""
     if "aligned_poly_flag" in sd or "aligned_dir_flag" in sd:
         raise ValueError("BSC-UNet-AP / AD 체크포인트는 csi_models.py에서 지원하지 않음 (논문 제외 시험 모델)")
+    if "poly_flag" in sd:
+        return BeamShortcutPolyUNet(2 * Tp, int(sd["poly_k"].item()), 2, dropout=dropout)
     if "aligned_flag" in sd:
         return BeamAlignedUNet(2 * Tp, 2, dropout=dropout)
     if "w_re" in sd:

@@ -2,7 +2,7 @@
 make_equations_docx.py -- CSI 예측 수식 정리 Word 문서 생성 -> docs/BSC-UNet_수식정리.docx
   각 수식: Word 수식(OMML, latex2mathml -> Office MML2OMML.XSL 변환) + 아래에 LaTeX 코드(PPT 수식 편집기 붙여넣기용)
   기준 구현: generate_ntn_csi_v9b_fdd_dl.m, data.py, csi_models.py, baselines.py, train_beam.py, evaluate.py
-            (확장: generate_ntn_csi_v10_fdd_dl.m)
+  (v9b 데이터, 제안 모델 BSC-UNet-P)
 """
 import os
 
@@ -28,7 +28,7 @@ TB = lambda hdr, rows: C.append(("table", hdr, rows))
 
 P("모든 수식은 실제 구현과 기호·정의가 일치하도록 작성했다. 각 수식 아래 회색 글씨는 PowerPoint 수식 편집기"
   "(삽입 → 수식 → LaTeX 형식)에 그대로 붙여 넣을 수 있는 LaTeX 코드이고, ‘구현’은 대응하는 파일·함수다. "
-  "주 결과는 v9b 데이터(위성 기준 방위각 0° 고정), 확장 결과는 v10 데이터(구면 궤도 기하, 10절)이다.")
+  "데이터는 v9b (위성 기준 방위각 0° 고정)이고, 제안 모델은 BSC-UNet-P다.")
 
 H1("1. 표기법")
 TB(["기호", "의미"], [
@@ -75,7 +75,9 @@ EQ(r"\log_{10}\mathrm{DS}\sim\mathcal{N}\left(\mu_{\lg\mathrm{DS}}(\varepsilon_e
 P("K-factor (LOS만, Table 6.7.2-3b, Ka-band):")
 EQ(r"K_{\mathrm{dB}}\sim\mathcal{N}\left(\mu_K(\varepsilon_e),\,\sigma_K^2(\varepsilon_e)\right)")
 P("Shadow fading / NLOS clutter loss (Table 6.6.2-2, Ka-band): LOS는 μ_SF = 0, σ_SF = 4 dB, "
-  "NLOS는 μ_SF = CL(ε) (44.3 dB@10° ~ 32.9 dB@90°), σ_SF = 6 dB.")
+  "NLOS는 μ_SF = CL(ε) (44.3 dB@10° ~ 32.9 dB@90°), σ_SF = 6 dB. "
+  "TR 38.811의 shadow fading은 평균 0의 로그정규(이득·감쇠 양방향)이지만, 구현은 max(0, ·)로 잘라 감쇠 방향만 반영한다 "
+  "(v9b LOS 에피소드의 약 절반이 0 dB: train 78/159, val 22/44, test 22/43, guard 25/53; NLOS는 평균 34–40 dB로 잘림 없음).")
 EQ(r"\mathrm{SF}_{\mathrm{dB}}=\max\left(0,\ \mu_{\mathrm{SF}}+\sigma_{\mathrm{SF}}Z\right),\qquad Z\sim\mathcal{N}(0,1)")
 P("대류권 섬광 감쇠 (Table 6.6.6.2.1-1, 20 GHz, 1% 초과 확률값을 상한으로 균등 샘플링):")
 EQ(r"A_{\mathrm{tropo,dB}}\sim\mathcal{U}\left[0,\ A_{1\%}(\varepsilon_e)\right]")
@@ -101,7 +103,7 @@ EQ(r"\mathbf{h}_q(i)\approx s_q(i)\,\mathbf{a}(\alpha,\beta),\qquad [\mathbf{a}]
 H2("3.4 OFDM 주파수 응답과 관측")
 P("관측 i마다 시각 tᵢ의 슬롯 하나만 생성하고(InitialTime = tᵢ), 경로 이득에 4절의 위상 항 ψ(t)를 곱한 뒤 완전 채널 추정으로 "
   "주파수 응답을 얻는다. τ₀는 에피소드 첫 관측에서 한 번 추정해 고정한 타이밍 오프셋(v9b)이다. "
-  "고정 오프셋이므로 관측 간 부반송파 위상 기울기 점프가 없다 (로더의 점프 보정은 v9b 전 split에서 0건 작동). "
+  "고정 오프셋이므로 관측 간 부반송파 위상 기울기 점프가 없다 (로더의 점프 보정 fix_timing_jumps는 기본으로 켜져 있으나 v9b 전 split의 모든 관측에서 보정량 0 — 사실상 보정 없음). "
   "아래는 경로 필터의 대역 제한을 무시한 근사식이며 구현은 nrPerfectChannelEstimate의 정확한 계산이다.")
 EQ(r"[\mathbf{h}_q(i)]_{mn}\approx\sum_{p}g_{p,mn}(t_i)\,\psi(t_i)\,e^{-j2\pi(q-150)\Delta f\,(\tau_p-\tau_0)},\qquad \Delta f=60\ \mathrm{kHz}")
 IMPL("관측 루프, nrPerfectTimingEstimate (첫 관측 1회), nrPerfectChannelEstimate(..., offset, sampleTimes), H(:, end, :, :)")
@@ -119,9 +121,10 @@ P("TR 38.811은 위성 속도·고각을 ‘few TTI’ 동안만 상수로 볼 �
 EQ(r"d(\theta)=\sqrt{R_e^2+R_h^2-2R_eR_h\cos\theta},\qquad f_D(\theta)=-\frac{f_c}{c}\,\omega\,\frac{R_eR_h\sin\theta}{d(\theta)}")
 EQ(r"\cos\theta_0(\varepsilon)=x\cos^2\varepsilon+\sin\varepsilon\sqrt{1-x^2\cos^2\varepsilon},\qquad x=\frac{R_e}{R_h},\quad \omega=\frac{v_{\mathrm{sat}}}{R_h},\quad R_h=R_e+h")
 EQ(r"\dot{f}_D^{\mathrm{raw}}(\varepsilon)=\omega^2\frac{\partial}{\partial\theta}\left[-\frac{f_c}{c}\frac{R_eR_h\sin\theta}{d(\theta)}\right]_{\theta=\theta_0(\varepsilon)}")
-P("미분은 Δθ = 10⁻⁵ rad 중앙 차분이다. 샘플링 Nyquist(1/(2Δt) = 500 Hz) 여유를 위해 에피소드 말미 잔차 순간주파수가 150 Hz를 넘지 않도록, "
-  "최악 조건 ε = 90° 기준 전역 스케일을 한 번만 정해 모든 에피소드에 같은 비율로 적용한다 (고각별 상대 차이 보존, f_D^raw(90°) = −6449.3 Hz/s). "
-  "π ḟ_D t²는 선형 위상 램프(상수 회전)로 제거되지 않는 2차 위상이다.")
+P("미분은 Δθ = 10⁻⁵ rad 중앙 차분이다. 구현은 에피소드 말미 잔차 순간주파수가 150 Hz를 넘지 않도록 최악 조건 ε = 90° 기준 "
+  "전역 스케일 κ를 한 번만 정해 모든 에피소드에 같은 비율로 적용한다 (고각별 상대 차이 보존, ḟ_D^raw(90°) = −6449.3 Hz/s). "
+  "κ는 궤도 정보 기반 보상과 수신기 주파수 추적 후 남는 Doppler 변화율 잔차의 크기를 정하는 모델링 선택이며, "
+  "κ = 1(보상 없는 실제 변화율) 조건의 민감도 분석을 10.1절에 함께 보고한다. π ḟ_D t²는 선형 위상 램프(상수 회전)로 제거되지 않는 2차 위상이다.")
 EQ(r"\kappa=\min\left(1,\ \frac{150\ \mathrm{Hz}}{|\dot{f}_D^{\mathrm{raw}}(90^\circ)|\cdot 0.15\ \mathrm{s}}\right)=0.1551,\qquad \dot{f}_D=\kappa\,\dot{f}_D^{\mathrm{raw}}(\varepsilon_e)")
 IMPL("dopplerRateAtElev, elevToCentralAngle, dopplerCentralAngleFunc, globalDopplerRateScale")
 H2("4.3 LO 위상잡음 (Wiener 과정)")
@@ -161,9 +164,10 @@ P("NMSE는 윈도우·부반송파·256 안테나 전체를 합산(pooled)해 �
 EQ(r"\mathrm{NMSE}_k=10\log_{10}\frac{\sum_{(e,w)}\sum_{q\in\mathcal{Q}}\left\|\hat{\mathbf{h}}_q(i^\star)-\bar{\mathbf{h}}_q(i^\star)\right\|^2}{\sum_{(e,w)}\sum_{q\in\mathcal{Q}}\left\|\bar{\mathbf{h}}_q(i^\star)\right\|^2}\ [\mathrm{dB}]")
 IMPL("evaluate.py")
 
-H1("7. 제안 모델: BSC-UNet (Beam-ShortCut UNet)")
-P("전체 구조: 첫째 항은 빔 지름길(물리 구조: 추정 빔 방향 × 예측 빔 계수), 둘째 항은 UNet 보정(학습)이다.")
-EQ(r"\hat{\mathbf{h}}(i^\star)=\hat{s}(i^\star)\,\hat{\mathbf{a}}+U_\Theta\left(\left[\tilde{\mathbf{H}},\,\mathbf{S}\right]\right)")
+H1("7. 제안 모델: BSC-UNet-P (2차 위상 외삽 빔 지름길 UNet)")
+P("전체 구조: 첫째 항은 빔 지름길(물리 구조: 추정 빔 방향 × 예측 빔 계수), 둘째 항은 UNet 보정(학습)이다. "
+  "빔 계수 예측은 학습형 선형 필터와 2차 위상 외삽의 합이다.")
+EQ(r"\hat{\mathbf{h}}(i^\star)=\hat{s}(i^\star)\,\hat{\mathbf{a}}+U_\Theta\left(\left[\tilde{\mathbf{H}},\,\mathbf{S},\,\mathbf{S}_{\mathrm{p}}\right]\right)")
 H2("7.1 빔 방향 추정 (학습 파라미터 없음)")
 P("rank-1 구조의 방향을 history 전체 에너지 최대화로 찾는다.")
 EQ(r"(\hat{\alpha},\hat{\beta})=\arg\max_{\alpha,\beta}\sum_{\tau=w}^{w+T_p-1}\left|\mathbf{a}(\alpha,\beta)^{H}\tilde{\mathbf{h}}(\tau)\right|^2")
@@ -172,15 +176,20 @@ EQ(r"P(k_1,k_2)=\sum_{\tau}\left|\sum_{m,n}[\tilde{\mathbf{H}}(\tau)]_{mn}\,e^{-
 P("② 정밀 탐색: α, β 각각 ±1 bin을 65점으로 나눠 같은 목적함수의 최대점. ③ 단위 노름 조향 벡터 구성.")
 EQ(r"\alpha\in\alpha_0+\frac{2\pi}{64}\{-1,\dots,1\},\qquad [\hat{\mathbf{a}}]_{mn}=\frac{1}{16}e^{j(\hat{\alpha}m+\hat{\beta}n)}")
 IMPL("csi_models.manifold_beam (NF = 64, N_FINE = 65)")
-H2("7.2 빔 지름길 (학습형 선형 시간 예측)")
-P("복소 T_p탭 필터 w_l은 0으로 초기화한다.")
-EQ(r"s(\tau)=\hat{\mathbf{a}}^{H}\tilde{\mathbf{h}}(\tau),\qquad \hat{s}(i^\star)=\sum_{l=0}^{T_p-1}w_l\,s(w+l),\qquad w_l\in\mathbb{C}")
-IMPL("_beam_shortcut, 파라미터 w_re, w_im")
+H2("7.2 빔 지름길: 학습형 선형 필터 + 2차 위상 외삽")
+P("빔 계수 history s(τ)를 구한다.")
+EQ(r"s(\tau)=\hat{\mathbf{a}}^{H}\tilde{\mathbf{h}}(\tau),\qquad \tau=w,\dots,w+T_p-1")
+P("2차 위상 외삽 (학습 없음): 시간축 o = τ − (w+T_p−1) ∈ {−(T_p−1), …, 0}에서 언랩 위상을 2차식, 크기를 1차식으로 최소제곱 적합해 o = k로 외삽한다. "
+  "Doppler 변화율 잔차가 만드는 에피소드별 2차 위상 π ḟ_D t²를 윈도우마다 직접 따라가기 위한 항이다 (고정 선형 필터는 에피소드마다 다른 ḟ_D의 2차 위상을 외삽할 수 없음).")
+EQ(r"\arg s(o)\approx c_2o^2+c_1o+c_0,\qquad |s(o)|\approx d_1o+d_0,\qquad s_{\mathrm{p}}(k)=\max\left(0,\,d_1k+d_0\right)e^{j(c_2k^2+c_1k+c_0)}")
+P("빔 계수 예측: 학습형 복소 T_p탭 필터(0으로 초기화)와 복소 이득 c(1로 초기화)를 쓴 2차 외삽의 합. 학습 시작점은 매니폴드 빔 + 2차 외삽(ManifoldPoly2)과 같다.")
+EQ(r"\hat{s}(i^\star)=\sum_{l=0}^{T_p-1}w_l\,s(w+l)+c\,s_{\mathrm{p}}(k),\qquad w_l,\,c\in\mathbb{C}")
+IMPL("csi_models.BeamShortcutPolyUNet, poly2_extrapolate, 파라미터 w_re, w_im, c_re, c_im (버퍼 poly_k = k)")
 H2("7.3 UNet 보정")
-P("입력은 원래 history와 빔 투영(잡음 제거) history의 연결이다 (4T_p = 80 채널).")
-EQ(r"\mathbf{S}(\tau)=s(\tau)\,\hat{\mathbf{a}},\qquad U_\Theta:\mathbb{R}^{4T_p\times16\times16}\rightarrow\mathbb{R}^{2\times16\times16}")
+P("입력은 원래 history, 빔 투영(잡음 제거) history, 2차 외삽 빔 투영의 연결이다 (4T_p + 2 = 82 채널). 파라미터 수 7,044,396.")
+EQ(r"\mathbf{S}(\tau)=s(\tau)\,\hat{\mathbf{a}},\qquad \mathbf{S}_{\mathrm{p}}=s_{\mathrm{p}}(k)\,\hat{\mathbf{a}},\qquad U_\Theta:\mathbb{R}^{(4T_p+2)\times16\times16}\rightarrow\mathbb{R}^{2\times16\times16}")
 TB(["층", "연산", "크기"], [
-    ["down1", "Conv 4×4 / stride 2, LeakyReLU(0.2)", "80×16² → 64×8²"],
+    ["down1", "Conv 4×4 / stride 2, LeakyReLU(0.2)", "82×16² → 64×8²"],
     ["down2", "Conv 4×4 / s2, InstanceNorm, LeakyReLU", "→ 128×4²"],
     ["down3", "Conv 4×4 / s2, InstanceNorm, LeakyReLU, Dropout 0.5", "→ 256×2²"],
     ["down4", "Conv 4×4 / s2, LeakyReLU, Dropout 0.5", "→ 512×1²"],
@@ -188,18 +197,20 @@ TB(["층", "연산", "크기"], [
     ["up1–up3", "ConvTranspose 4×4 / s2, Norm, ReLU (+Dropout), skip concat", "→ 128×8²"],
     ["final", "Upsample ×2, pad, Conv 4×4", "→ 2×16²"],
 ])
-IMPL("csi_models.GeneratorUNet, BeamShortcutUNet.forward")
+IMPL("csi_models.GeneratorUNet, BeamShortcutPolyUNet.forward")
 H2("7.4 학습")
-P("빔 필터 w와 UNet Θ를 end-to-end로 함께 학습한다 (MSE, NMSE와 일치).")
-EQ(r"\mathcal{L}(\Theta,\mathbf{w})=\frac{1}{N}\sum_{\text{batch}}\left\|\hat{\mathbf{h}}(i^\star)-\bar{\mathbf{h}}(i^\star)\right\|^2")
+P("빔 필터 w, 외삽 이득 c, UNet Θ를 end-to-end로 함께 학습한다 (MSE, NMSE와 일치).")
+EQ(r"\mathcal{L}(\Theta,\mathbf{w},c)=\frac{1}{N}\sum_{\text{batch}}\left\|\hat{\mathbf{h}}(i^\star)-\bar{\mathbf{h}}(i^\star)\right\|^2")
+P("학습률은 epoch e(= 1, 2, …)에서 다음과 같다: 80 epoch 동안 코사인으로 감소한 뒤 η_min 유지.")
+EQ(r"\eta_e=\eta_{\min}+\frac{1}{2}\left(\eta_0-\eta_{\min}\right)\left(1+\cos\frac{\pi\min(e-1,\,80)}{80}\right),\qquad \eta_0=10^{-4},\quad \eta_{\min}=10^{-6}")
 TB(["항목", "값"], [
     ["옵티마이저", "Adam, η₀ = 10⁻⁴, (β₁, β₂) = (0.9, 0.999), gradient clipping 1.0"],
-    ["학습률", "cosine, 80 epoch 동안 10⁻⁴ → 10⁻⁶"],
+    ["학습률", "코사인 80 epoch (10⁻⁴ → 10⁻⁶) 후 10⁻⁶ 유지 (위 식, LambdaLR)"],
     ["가중치 평균", "EMA 0.999 (검증·저장·평가에 EMA 가중치 사용)"],
     ["배치", "윈도우 4개 × 부반송파 12 = 샘플 48개"],
     ["선택·종료", "3-epoch 이동평균 val NMSE 최소 저장, patience 20, 최대 100 epoch, seed 42"],
 ])
-IMPL("train_beam.py --lr_sched cosine --cosine_epochs 80 --ema 0.999 --beta1 0.9 --grad_clip 1.0 --patience 20 --epochs 100")
+IMPL("train_beam.py --poly_shortcut --lr_sched cosine --cosine_epochs 80 --ema 0.999 --beta1 0.9 --grad_clip 1.0 --patience 20 --epochs 100")
 
 H1("8. 비교 기법")
 P("모든 비교 기법은 같은 입력(잡음 history T_p개, 부반송파별 독립)만 쓴다. 학습형 기법은 train으로 적합하고 정규화 계수 α는 "
@@ -220,8 +231,10 @@ EQ(r"\arg s(o)\approx c_2o^2+c_1o+c_0,\qquad |s(o)|\approx d_1o+d_0")
 EQ(r"\hat{\mathbf{h}}(i^\star)=\max\left(0,\,d_1k+d_0\right)e^{j(c_2k^2+c_1k+c_0)}\,\mathbf{g}")
 P("BeamLinReg: 같은 고유빔 g, 미래 빔 계수 gᴴh̄(i*)를 목표로 train ridge 적합.")
 EQ(r"\hat{s}=\mathbf{s}^{T}\mathbf{w}_k,\qquad \hat{\mathbf{h}}(i^\star)=\hat{s}\,\mathbf{g}")
-P("ManifoldLinReg: BeamLinReg에서 g ← â (배열 매니폴드 빔, manifold_beam). BSC-UNet에서 UNet을 뺀 구조이며 지름길 필터를 닫힌 식으로 적합한다. "
-  "ManifoldPoly2 (ablation): Poly2_blind에서 g ← â. 매니폴드 빔 + 2차 위상 외삽 (학습 없음).")
+P("ManifoldLinReg: BeamLinReg에서 g ← â (배열 매니폴드 빔, manifold_beam). 선형 지름길만 쓰고 UNet이 없는 구조 (필터를 닫힌 식으로 적합). "
+  "ManifoldPoly2 (ablation): Poly2_blind에서 g ← â. BSC-UNet-P에서 학습 부분(w, c, UNet)을 모두 뺀 2차 외삽 지름길 (학습 없음).")
+P("BSC-UNet-I (ablation): BSC-UNet-P에서 2차 외삽 항을 뺀 구조. 빔 지름길이 학습형 선형 필터뿐이다 (UNet 입력 4T_p = 80 채널).")
+EQ(r"\hat{s}_{\mathrm{I}}(i^\star)=\sum_{l=0}^{T_p-1}w_l\,s(w+l),\qquad \hat{\mathbf{h}}_{\mathrm{I}}(i^\star)=\hat{s}_{\mathrm{I}}(i^\star)\,\hat{\mathbf{a}}+U_\Theta\left(\left[\tilde{\mathbf{H}},\,\mathbf{S}\right]\right)")
 IMPL("baselines.Baselines.fit / predict, _blind_beam, _manifold_v_fn, _ridge, _autocorr")
 
 H1("9. 통계 검정과 누수 검사")
@@ -231,31 +244,21 @@ EQ(r"\Delta=10\log_{10}\frac{\sum_{e}N_e^{(A)}}{\sum_{e}D_e}-10\log_{10}\frac{\s
 P("누수 검사: (T2) 정답을 윈도우 간 섞었을 때 NMSE ≥ 0 dB, (T3) 출력과 k′ 시점 정답의 NMSE가 학습한 k에서 최소.")
 IMPL("evaluate.py --leak_check")
 
-H1("10. 확장: 기하 일관 데이터(v10)와 빔 정렬 모델(BSC-UNet-AI)")
-H2("10.1 구면 궤도 기하")
-P("에피소드마다 고각 ε_e(같은 스윕·split)에 대해 단말 cross-track 중심각 ψ와 통과 방향 σ를 뽑고 (전용 난수열), 지구 중심 좌표에서 위성·단말 위치와 속도를 정한다.")
-EQ(r"\psi\sim\mathcal{U}[-\gamma,\gamma],\quad \gamma=\theta_0(\varepsilon_e),\quad \sigma\in\{\pm1\},\qquad \theta=\sigma\arccos\frac{\cos\gamma}{\cos\psi}")
-EQ(r"\mathbf{r}_{\mathrm{sat}}=R_h[\sin\theta,\,0,\,\cos\theta]^{T},\qquad \mathbf{r}_{\mathrm{UE}}=R_e[0,\,\sin\psi,\,\cos\psi]^{T},\qquad \mathbf{v}=v_{\mathrm{sat}}[\cos\theta,\,0,\,-\sin\theta]^{T}")
-P("l = r_sat − r_UE, 위성 본체 축 x_b = v/v_sat, z_b = −r_sat/R_h (nadir), y_b = z_b × x_b, u = −l/‖l‖. "
-  "생성기는 ḟ_D를 1 ms 중앙 차분으로 계산하며 아래 닫힌 식과 상대오차 10⁻⁹ 미만으로 일치한다.")
-EQ(r"f_{D,\mathrm{geo}}=-\frac{f_c}{c}\,\frac{\mathbf{v}^{T}\mathbf{l}}{\|\mathbf{l}\|},\qquad \dot{f}_{D,\mathrm{geo}}=-\frac{f_c}{c}\,\frac{\|\mathbf{v}\|^2+\mathbf{l}^{T}\mathbf{a}_c-\left(\mathbf{v}^{T}\mathbf{l}/\|\mathbf{l}\|\right)^2}{\|\mathbf{l}\|},\qquad \mathbf{a}_c=-\omega^2\mathbf{r}_{\mathrm{sat}}")
-EQ(r"\phi_{\mathrm{sat}}=\mathrm{atan2}\left(\mathbf{u}^{T}\mathbf{y}_b,\ \mathbf{u}^{T}\mathbf{x}_b\right),\qquad \eta=\arccos\left(\mathbf{u}^{T}\mathbf{z}_b\right),\qquad \sin\eta=\frac{R_e}{R_h}\cos\varepsilon")
-P("nrCDLChannel에는 MaximumDopplerShift(2) = |f_D,geo|/cos ε (적용값 = |f_D,geo|), Doppler 변화율 잔차에는 κ·ḟ_D,geo를 쓴다. "
-  "nadir 지향 배열을 단말 지점 좌표계에서 표현하는 회전(TR 38.901 LCS–GCS 변환, bearing–downtilt–slant)은 다음과 같다. "
-  "이때 LOS 위상 기울기의 크기는 π sin η, 방향은 180° − φ_sat이다 (생성 데이터로 확인). "
-  "TR 38.811 통계 파라미터(K, DS, SF)는 고각만의 함수로 그대로 쓰고, 방위각은 배열 공간 응답에만 들어간다.")
-EQ(r"\mathrm{Orientation}=\left[\,0;\ 90^\circ-\gamma_c;\ \phi_{\mathrm{sat}}\,\right],\qquad \gamma_c=90^\circ-\varepsilon-\eta,\qquad \sqrt{\alpha^2+\beta^2}=\pi\sin\eta")
-IMPL("generate_ntn_csi_v10_fdd_dl.m: passGeometry, passState; 검증 check_doppler_rate_v10.py, validate_v10.py")
-H2("10.2 빔 정렬 모델 (BSC-UNet-AI)")
-P("빔 지름길은 7절과 같고, UNet은 추정 방향을 제거한 정렬 좌표에서 잔차를 예측한 뒤 방향을 되돌린다 (replicate 패딩). "
-  "방향이 달라도 UNet이 보는 입력이 같아지므로 방위각에 대한 일반화가 구조적으로 확보된다.")
-EQ(r"\mathbf{u}=16\,\hat{\mathbf{a}},\qquad \tilde{\mathbf{H}}^{\mathrm{al}}(\tau)=\tilde{\mathbf{H}}(\tau)\odot\mathbf{u}^{*},\qquad \mathbf{S}^{\mathrm{al}}(\tau)=\frac{s(\tau)}{16}\,\mathbf{1}_{16\times16}")
-EQ(r"\hat{\mathbf{h}}(i^\star)=\hat{s}(i^\star)\,\hat{\mathbf{a}}+U_\Theta\left(\left[\tilde{\mathbf{H}}^{\mathrm{al}},\,\mathbf{S}^{\mathrm{al}}\right]\right)\odot\mathbf{u}")
-IMPL("csi_models.BeamAlignedUNet, train_beam.py --aligned")
-H2("10.3 방위각 일반화 시험 (v9b 모델)")
-P("다른 방위각의 단말은 열 방향 위상 기울기를 곱해 모사한다 (rank-1 구조에서 β 변화와 등가).")
+H1("10. 민감도 분석과 한계 시험")
+H2("10.1 Doppler 변화율 스케일 κ")
+P("κ = 1(보상 없는 실제 변화율) 데이터는 재생성 없이 저장된 채널에 빠진 2차 위상을 곱해 만든다 (모든 안테나·부반송파 공통 위상이라 정확). "
+  "baseline은 κ = 1 train/val로 다시 적합하고, 모델은 κ = 1 데이터로 다시 학습한다.")
+EQ(r"\mathbf{h}_q^{(\kappa=1)}(i)=\mathbf{h}_q(i)\,\exp\left(j\pi\dot{f}_D\left(\frac{1}{\kappa}-1\right)t_i^2\right),\qquad \kappa=0.1551")
+IMPL("data.rescale_doppler_rate, train_beam.py / evaluate.py --doppler_rate_kappa 1")
+H2("10.2 Shadow fading 불변성")
+P("에피소드 상수 이득 g_e(TR 38.811대로 평균 0 로그정규, 양방향)를 관측 채널과 누적 최댓값에 함께 곱해도 인과적 정규화 후 모델 입력·정답이 같다 "
+  "(검증: 최대 상대 차이 3×10⁻⁷, float32 반올림 수준). 따라서 구현의 max(0, ·) 절단은 예측 결과에 영향이 없다.")
+EQ(r"\frac{g_e\,\mathbf{h}_q(i)}{g_e\,c_e(w+T_p-1)}=\bar{\mathbf{h}}_q(i)")
+IMPL("check_shadow_invariance.py")
+H2("10.3 방위각 일반화 시험")
+P("다른 방위각의 단말은 열 방향 위상 기울기를 곱해 모사한다 (rank-1 구조에서 β 변화와 등가). 모델·baseline은 방위각 0°(β = 0)로 학습한 그대로다.")
 EQ(r"[\mathbf{H}^{(\beta)}_q(i)]_{mn}=[\mathbf{H}_q(i)]_{mn}\,e^{j\beta n},\qquad \beta\in\{0,\,0.5,\,1,\,2,\,3\}\ \mathrm{rad}")
-IMPL("eval_bearing.py")
+IMPL("eval_bearing_final.py")
 
 H1("11. 기호–구현 대응표")
 TB(["수식", "구현"], [
@@ -267,9 +270,9 @@ TB(["수식", "구현"], [
     ["c_e(i)", "causalMaxPerSlot → data.Split.cm"],
     ["σ_n², SNR, ω̂", "data.Windows.batch: std, snr, omega"],
     ["â", "csi_models.manifold_beam"],
-    ["s, ŝ, w_l", "_beam_shortcut, w_re, w_im"],
+    ["s, s_p, ŝ, w_l, c", "BeamShortcutPolyUNet.forward, poly2_extrapolate, w_re, w_im, c_re, c_im"],
     ["U_Θ", "csi_models.GeneratorUNet"],
-    ["BSC-UNet / BSC-UNet-AI", "BeamShortcutUNet / BeamAlignedUNet"],
+    ["BSC-UNet-P (제안) / BSC-UNet-I (ablation)", "BeamShortcutPolyUNet / BeamShortcutUNet"],
     ["NMSE, bootstrap", "evaluate.py (groups, paired)"],
 ])
 
@@ -331,7 +334,7 @@ def build():
     for name in ("Title", "Heading 1", "Heading 2"):
         s = doc.styles[name]; s.font.name = "Malgun Gothic"
         s.element.rPr.rFonts.set(qn("w:eastAsia"), "Malgun Gothic")
-    doc.add_heading("LEO NTN Ka-band FDD 하향링크 CSI 예측: 데이터 생성 · BSC-UNet · 비교 기법 · 평가 수식 정리", level=0)
+    doc.add_heading("LEO NTN Ka-band FDD 하향링크 CSI 예측: 데이터 생성 · BSC-UNet-P · 비교 기법 · 평가 수식 정리", level=0)
     for item in C:
         kind = item[0]
         if kind == "h1":

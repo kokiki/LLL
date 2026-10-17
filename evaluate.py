@@ -19,7 +19,7 @@ import numpy as np
 import torch
 
 from baselines import NAMES, Baselines
-from data import Split, Windows, from_model_out, to_model_io
+from data import Split, Windows, from_model_out, rescale_doppler_rate, to_model_io
 from csi_models import build_model_from_state_dict
 
 
@@ -37,11 +37,16 @@ def main():
     ap.add_argument("--n_boot", type=int, default=10000)
     ap.add_argument("--leak_check", action="store_true")
     ap.add_argument("--elev_range", type=float, nargs=2, default=None, help="모든 split을 이 고각 범위 에피소드로 제한 (비교 실험용)")
+    ap.add_argument("--doppler_rate_kappa", type=float, default=None,
+                    help="v9b Doppler 변화율 잔차 스케일을 κ=0.155에서 이 값으로 바꿔 사용 (1 = 실제 변화율, 민감도 실험용)")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
     dev = "cuda"
     t0 = time.time()
     tr, va, ev = (Split(a.data_root, s, a.sc_stride, dev, elev_range=a.elev_range) for s in ("train", "val", a.split))
+    if a.doppler_rate_kappa is not None:                                  # Doppler 변화율 스케일 민감도 (v9b 전용)
+        for sp in (tr, va, ev):
+            rescale_doppler_rate(sp, a.doppler_rate_kappa)
     Tp = a.Tp or tr.Tp_file
     ck = []
     for spec in a.ckpt:
