@@ -5,6 +5,7 @@ eval_bearing_final.py -- (최종 모델 BSC-UNet-P + BSC-UNet-I + ManifoldPoly2)
   출력: β별 전체 NMSE, 안쪽 / 행 가장자리(위·아래) / 열 가장자리(좌·우) NMSE  ->  runs/eval_bearing_v9b_final.json
   BSC-UNet-I는 학습률 수정 모델(k=1, 4)과 기존 모델(k=16, 81 epoch 전 저장으로 동일)을 사용
 """
+import argparse
 import json
 
 import numpy as np
@@ -12,7 +13,7 @@ import torch
 
 from baselines import Baselines
 from compare_models import load
-from data import Split, Windows, from_model_out, to_model_io
+from data import Split, Windows, from_model_out, rescale_doppler_rate, to_model_io
 
 D = "./csi_dataset_FDD_DL_Kaband_Urban_SCS60kHz_dt1ms_v9b"
 Tp, Tf, KS = 20, 16, [1, 4, 16]
@@ -24,8 +25,20 @@ MODELS = {"BSC-UNet-P": "runs/v9b_Tp20_bscP_k{k}ms/best_G.pt",
                          16: "runs/v9b_Tp20_bscI_k16ms/best_G.pt"}}
 
 
+MODELS_KAPPA1 = {"BSC-UNet-P": "runs/v9b_Tp20_bscP_kappa1_k{k}ms/best_G.pt", "BSC-UNet-I": "runs/v9b_Tp20_bscI_kappa1_k{k}ms/best_G.pt"}
+
+
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--doppler_rate_kappa", type=float, default=None, help="1 = 실제 Doppler 변화율 조건 (κ = 1로 학습한 모델 사용)")
+    a = ap.parse_args()
+    global MODELS
     tr, va, te = (Split(D, s) for s in ("train", "val", "test"))
+    tag = "final"
+    if a.doppler_rate_kappa is not None:
+        for sp in (tr, va, te):
+            rescale_doppler_rate(sp, a.doppler_rate_kappa)
+        MODELS = MODELS_KAPPA1; tag = f"kappa{a.doppler_rate_kappa:g}"
     bl = Baselines(Tp, KS, 1.0).fit(Windows(tr, Tp, Tf), Windows(va, Tp, Tf))
     G = {m: {k: load(p[k] if isinstance(p, dict) else p.format(k=k), Tp, "cuda") for k in KS} for m, p in MODELS.items()}
     n = torch.arange(16, device="cuda", dtype=torch.float64)
@@ -69,8 +82,8 @@ def main():
         print(f"  {'BSC-UNet-P 위치별':14s}" + "".join(f"  β={b:<5g}" for b in BETAS))
         for g in masks:
             print(f"  {g:16s}" + "".join(f"{out[str(k)]['BSC-UNet-P'][f'{b:g}'][g]:9.2f}" for b in BETAS))
-    json.dump(out, open("runs/eval_bearing_v9b_final.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-    print("\nSaved runs/eval_bearing_v9b_final.json")
+    json.dump(out, open(f"runs/eval_bearing_v9b_{tag}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    print(f"\nSaved runs/eval_bearing_v9b_{tag}.json")
 
 
 if __name__ == "__main__":

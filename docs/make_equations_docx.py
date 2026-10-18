@@ -121,11 +121,13 @@ P("TR 38.811은 위성 속도·고각을 ‘few TTI’ 동안만 상수로 볼 �
 EQ(r"d(\theta)=\sqrt{R_e^2+R_h^2-2R_eR_h\cos\theta},\qquad f_D(\theta)=-\frac{f_c}{c}\,\omega\,\frac{R_eR_h\sin\theta}{d(\theta)}")
 EQ(r"\cos\theta_0(\varepsilon)=x\cos^2\varepsilon+\sin\varepsilon\sqrt{1-x^2\cos^2\varepsilon},\qquad x=\frac{R_e}{R_h},\quad \omega=\frac{v_{\mathrm{sat}}}{R_h},\quad R_h=R_e+h")
 EQ(r"\dot{f}_D^{\mathrm{raw}}(\varepsilon)=\omega^2\frac{\partial}{\partial\theta}\left[-\frac{f_c}{c}\frac{R_eR_h\sin\theta}{d(\theta)}\right]_{\theta=\theta_0(\varepsilon)}")
-P("미분은 Δθ = 10⁻⁵ rad 중앙 차분이다. 구현은 에피소드 말미 잔차 순간주파수가 150 Hz를 넘지 않도록 최악 조건 ε = 90° 기준 "
-  "전역 스케일 κ를 한 번만 정해 모든 에피소드에 같은 비율로 적용한다 (고각별 상대 차이 보존, ḟ_D^raw(90°) = −6449.3 Hz/s). "
-  "κ는 궤도 정보 기반 보상과 수신기 주파수 추적 후 남는 Doppler 변화율 잔차의 크기를 정하는 모델링 선택이며, "
-  "κ = 1(보상 없는 실제 변화율) 조건의 민감도 분석을 10.1절에 함께 보고한다. π ḟ_D t²는 선형 위상 램프(상수 회전)로 제거되지 않는 2차 위상이다.")
-EQ(r"\kappa=\min\left(1,\ \frac{150\ \mathrm{Hz}}{|\dot{f}_D^{\mathrm{raw}}(90^\circ)|\cdot 0.15\ \mathrm{s}}\right)=0.1551,\qquad \dot{f}_D=\kappa\,\dot{f}_D^{\mathrm{raw}}(\varepsilon_e)")
+P("미분은 Δθ = 10⁻⁵ rad 중앙 차분이다 (ḟ_D^raw(90°) = −6449.3 Hz/s). 주 결과는 Doppler 변화율 잔차를 보상하지 않은 "
+  "실제 크기(κ = 1, 에피소드 시작 시점의 Doppler만 사전보상)를 쓴다. 변화율 잔차의 일부만 남는 부분 보상 가정(κ = 0.155)은 민감도로 함께 보고한다 (10.1절). "
+  "π ḟ_D t²는 선형 위상 램프(상수 회전)로 제거되지 않는 2차 위상이다.")
+EQ(r"\dot{f}_D=\kappa\,\dot{f}_D^{\mathrm{raw}}(\varepsilon_e),\qquad \kappa=1\ (\text{main}),\quad \kappa=0.1551\ (\text{sensitivity})")
+P("구현 메모: 생성기는 에피소드 말미 잔차 순간주파수 150 Hz 상한으로 정한 전역 스케일 κ = 0.1551로 저장했고(아래 식), "
+  "κ = 1 데이터는 로더에서 빠진 2차 위상을 곱해 정확히 복원한다 (10.1절).")
+EQ(r"\kappa_{\mathrm{gen}}=\min\left(1,\ \frac{150\ \mathrm{Hz}}{|\dot{f}_D^{\mathrm{raw}}(90^\circ)|\cdot 0.15\ \mathrm{s}}\right)=0.1551")
 IMPL("dopplerRateAtElev, elevToCentralAngle, dopplerCentralAngleFunc, globalDopplerRateScale")
 H2("4.3 LO 위상잡음 (Wiener 과정)")
 P("관측마다 한 번 갱신하고 그 슬롯 안에서는 상수다 (150 ms 누적 표준편차 약 3.7°).")
@@ -249,9 +251,9 @@ IMPL("evaluate.py --leak_check")
 
 H1("10. 민감도 분석과 한계 시험")
 H2("10.1 Doppler 변화율 스케일 κ")
-P("κ = 1(보상 없는 실제 변화율) 데이터는 재생성 없이 저장된 채널에 빠진 2차 위상을 곱해 만든다 (모든 안테나·부반송파 공통 위상이라 정확). "
-  "baseline은 κ = 1 train/val로 다시 적합하고, 모델은 κ = 1 데이터로 다시 학습한다.")
-EQ(r"\mathbf{h}_q^{(\kappa=1)}(i)=\mathbf{h}_q(i)\,\exp\left(j\pi\dot{f}_D\left(\frac{1}{\kappa}-1\right)t_i^2\right),\qquad \kappa=0.1551")
+P("주 결과(κ = 1) 데이터는 재생성 없이 저장된 채널(κ_gen = 0.1551)에 빠진 2차 위상을 곱해 만든다 (모든 안테나·부반송파 공통 위상이라 정확). "
+  "민감도(κ = 0.155)는 저장된 채널을 그대로 쓴다. 각 조건에서 baseline은 같은 κ의 train/val로 적합하고, 모델은 같은 κ 데이터로 학습한다.")
+EQ(r"\mathbf{h}_q^{(\kappa=1)}(i)=\mathbf{h}_q(i)\,\exp\left(j\pi\dot{f}_D^{\mathrm{gen}}\left(\frac{1}{\kappa_{\mathrm{gen}}}-1\right)t_i^2\right),\qquad \dot{f}_D^{\mathrm{gen}}=\kappa_{\mathrm{gen}}\dot{f}_D^{\mathrm{raw}}")
 IMPL("data.rescale_doppler_rate, train_beam.py / evaluate.py --doppler_rate_kappa 1")
 H2("10.2 Shadow fading 불변성")
 P("에피소드 상수 이득 g_e(TR 38.811대로 평균 0 로그정규, 양방향)를 관측 채널과 누적 최댓값에 함께 곱해도 인과적 정규화 후 모델 입력·정답이 같다 "
