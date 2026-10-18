@@ -233,6 +233,9 @@ P("BeamLinReg: 같은 고유빔 g, 미래 빔 계수 gᴴh̄(i*)를 목표로 tr
 EQ(r"\hat{s}=\mathbf{s}^{T}\mathbf{w}_k,\qquad \hat{\mathbf{h}}(i^\star)=\hat{s}\,\mathbf{g}")
 P("ManifoldLinReg: BeamLinReg에서 g ← â (배열 매니폴드 빔, manifold_beam). 선형 지름길만 쓰고 UNet이 없는 구조 (필터를 닫힌 식으로 적합). "
   "ManifoldPoly2 (ablation): Poly2_blind에서 g ← â. BSC-UNet-P에서 학습 부분(w, c, UNet)을 모두 뺀 2차 외삽 지름길 (학습 없음).")
+P("ManifoldCombo (ablation): BSC-UNet-P의 지름길 입력(빔계수 history + 2차 외삽값)을 UNet 없이 train ridge로 최적 적합한 고전 조합 예측 "
+  "(α는 val로 k별 선택). BSC-UNet-P와의 차이가 UNet의 순수 기여다.")
+EQ(r"\hat{s}_{\mathrm{C}}(i^\star)=\mathbf{f}^{T}\mathbf{w}_k^{\mathrm{C}},\qquad \mathbf{f}=\left[s(w),\dots,s(w+T_p-1),\,s_{\mathrm{p}}(k)\right]^{T},\qquad \mathbf{w}_k^{\mathrm{C}}=\mathrm{ridge}(\cdot;\alpha),\qquad \hat{\mathbf{h}}_{\mathrm{C}}=\hat{s}_{\mathrm{C}}\,\hat{\mathbf{a}}")
 P("BSC-UNet-I (ablation): BSC-UNet-P에서 2차 외삽 항을 뺀 구조. 빔 지름길이 학습형 선형 필터뿐이다 (UNet 입력 4T_p = 80 채널).")
 EQ(r"\hat{s}_{\mathrm{I}}(i^\star)=\sum_{l=0}^{T_p-1}w_l\,s(w+l),\qquad \hat{\mathbf{h}}_{\mathrm{I}}(i^\star)=\hat{s}_{\mathrm{I}}(i^\star)\,\hat{\mathbf{a}}+U_\Theta\left(\left[\tilde{\mathbf{H}},\,\mathbf{S}\right]\right)")
 IMPL("baselines.Baselines.fit / predict, _blind_beam, _manifold_v_fn, _ridge, _autocorr")

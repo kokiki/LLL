@@ -14,6 +14,8 @@ baselines.py -- 비교 기준 예측기 (전부 GPU 배치, data.Windows 배치�
   ManifoldLinReg   : BeamLinReg와 같되 빔을 배열 구조(16x16 등간격 평면파)로 추정 (csi_models.manifold_beam:
                      2D FFT 탐색 + 정밀 탐색). = BSC-UNet에서 UNet을 뺀 것 (ablation 겸 비교용)
   ManifoldPoly2    : ManifoldLinReg와 같은 배열 구조 빔 + Poly2_blind와 같은 빔계수 위상 2차/진폭 1차 외삽 (학습 없음)
+  ManifoldCombo    : 선형 + 2차 외삽 조합 (UNet 없음). 같은 매니폴드 빔계수 history s (Tp) + 2차 외삽값 s_p(k) (1)를 입력으로
+                     미래 빔계수를 train ridge 회귀 (α는 val로 k별 선택) = BSC-UNet-P의 지름길을 닫힌 식으로 최적 적합한 것
 (필수 비교 5종. ephemeris 보조 참고값(Poly2 oracle)은 v9에서 제외)
 """
 from __future__ import annotations
@@ -24,11 +26,12 @@ from typing import Dict, List
 import numpy as np
 import torch
 
-from csi_models import manifold_beam
+from csi_models import manifold_beam, poly2_extrapolate
 
 C128 = torch.complex128
 ALPHAS = [0.0, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0]
-NAMES = ["Persistence", "LMMSE", "Kalman", "LinReg_eig", "Poly2_blind", "BeamLinReg", "ManifoldLinReg", "ManifoldPoly2"]
+NAMES = ["Persistence", "LMMSE", "Kalman", "LinReg_eig", "Poly2_blind", "BeamLinReg", "ManifoldLinReg", "ManifoldPoly2",
+         "ManifoldCombo"]
 
 
 def _autocorr(X):
@@ -112,6 +115,9 @@ class Baselines:
         BT = ("svd", "manifold")                                # BeamLinReg / ManifoldLinReg
         Ab = {t: torch.zeros(Tp, Tp, dtype=C128, device=dev) for t in BT}
         Bb = {t: torch.zeros(Tp, len(self.ks), dtype=C128, device=dev) for t in BT}
+        nk = len(self.ks)
+        Ac = torch.zeros(nk, Tp + 1, Tp + 1, dtype=C128, device=dev)                       # ManifoldCombo (k별)
+        Bc = torch.zeros(nk, Tp + 1, dtype=C128, device=dev)
         Uc = self.U.to(torch.complex64)
         for d in batches():                                     # pass 2 (pass 1과 동일 윈도우·노이즈)
             B_, S = d["hist_n"].shape[:2]
@@ -121,10 +127,15 @@ class Baselines:
             for t in BT:
                 sb, yb, _, _ = self._beam_coef(d, t)
                 Ab[t] += sb.mH @ sb; Bb[t] += sb.mH @ yb
+                if t == "manifold":
+                    for j, F in enumerate(self._combo_feats(sb)):
+                        Ac[j] += F.mH @ F; Bc[j] += F.mH @ yb[:, j]
         cands = [_ridge(Ae, Be, a) for a in ALPHAS]                                     # (256, Tp, nk)
         cands_b = {t: [_ridge(Ab[t], Bb[t], a) for a in ALPHAS] for t in BT}             # (Tp, nk)
         vnum = torch.zeros(len(ALPHAS), len(self.ks), dtype=torch.float64, device=dev)
         vnum_b = {t: torch.zeros_like(vnum) for t in BT}
+        cands_c = [[_ridge(Ac[j], Bc[j][:, None], a)[:, 0] for j in range(nk)] for a in ALPHAS]   # [α][k] (Tp+1,)
+        vnum_c = torch.zeros_like(vnum)
         vden = torch.zeros(len(self.ks), dtype=torch.float64, device=dev)
         for d in val_w.eval_batches(windows_per_batch, seed=777):
             y = d["fut"][:, :, [k - 1 for k in self.ks]].to(C128)                         # (B,S,nk,256)
@@ -138,6 +149,12 @@ class Baselines:
                 for i, W in enumerate(cands_b[t]):
                     p = (sb @ W)[..., None] * v.conj()[:, None, :]                      # (N,nk,256)
                     vnum_b[t][i] += ((p - Y).abs() ** 2).sum(dim=(0, 2))
+                if t == "manifold":
+                    feats = self._combo_feats(sb)
+                    for i in range(len(ALPHAS)):
+                        for j, F in enumerate(feats):
+                            p = (F @ cands_c[i][j])[:, None] * v.conj()                   # (N,256)
+                            vnum_c[i, j] += ((p - Y[:, j]).abs() ** 2).sum()
         best = (vnum / vden).argmin(0).cpu().numpy()
         self.W_eig = torch.stack([cands[best[j]][:, :, j] for j in range(len(self.ks))], 2)
         self.alpha = [ALPHAS[b] for b in best]
@@ -148,7 +165,14 @@ class Baselines:
             self.alpha_bt[t] = [ALPHAS[b] for b in best_b]
         self.W_beam, self.alpha_beam = self.W_bt["svd"], self.alpha_bt["svd"]
         self.alpha_manifold = self.alpha_bt["manifold"]
+        best_c = (vnum_c / vden).argmin(0).cpu().numpy()
+        self.W_combo = [cands_c[best_c[j]][j] for j in range(nk)]                            # [k] (Tp+1,)
+        self.alpha_combo = [ALPHAS[b] for b in best_c]
         return self
+
+    def _combo_feats(self, s):
+        """빔계수 history s (N, Tp) -> k별 입력 [s, s_p(k)] (N, Tp+1) 리스트 (ManifoldCombo)."""
+        return [torch.cat([s, poly2_extrapolate(s, k)[:, None]], 1) for k in self.ks]
 
     def _beam_coef(self, d, kind="svd"):
         """배치 -> (빔계수 history s (N,Tp), 미래 빔계수 (N,nk), 결합 벡터 v (N,256), 미래 정답 (N,nk,256)), N = B*S.
@@ -207,4 +231,6 @@ class Baselines:
         amp_m = torch.clamp((s_m.abs() @ P1.T) @ V(tk, 1).T, min=0)
         sk_m = amp_m * torch.exp(1j * ((ph_m @ P2.T) @ V(tk, 2).T))
         out["ManifoldPoly2"] = (sk_m[..., None] * vm.conj()[:, None, :]).reshape(B, S, nk, 256)
+        sc = torch.stack([F @ W for F, W in zip(self._combo_feats(s_m), self.W_combo)], 1)    # (BS, nk)
+        out["ManifoldCombo"] = (sc[..., None] * vm.conj()[:, None, :]).reshape(B, S, nk, 256)
         return out

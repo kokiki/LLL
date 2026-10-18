@@ -61,7 +61,7 @@ def main():
     print(f"eval split={a.split} {ev}  windows={len(Wev)}  ks={ks} (x{tr.dt_ms}ms)  load {time.time()-t0:.1f}s", flush=True)
     t0 = time.time()
     bl = Baselines(Tp, ks, tr.dt_ms, dev).fit(Wtr, Wva)
-    print(f"baselines fitted {time.time()-t0:.1f}s  noise_var={bl.nv:.3e}  LinReg α by k={bl.alpha}  BeamLinReg α by k={bl.alpha_beam}  ManifoldLinReg α by k={bl.alpha_manifold}", flush=True)
+    print(f"baselines fitted {time.time()-t0:.1f}s  noise_var={bl.nv:.3e}  LinReg α by k={bl.alpha}  BeamLinReg α by k={bl.alpha_beam}  ManifoldLinReg α by k={bl.alpha_manifold}  ManifoldCombo α by k={bl.alpha_combo}", flush=True)
 
     methods = list(NAMES) + [c[0] for c in ck]
     nk = len(ks)
@@ -104,7 +104,7 @@ def main():
     ep_groups = {"all": np.ones(ev.E, bool), "LOS": ~nlos, "NLOS": nlos, "elev<50": el < 50, "elev>=50": el >= 50}
     db = lambda n, d: 10 * np.log10(np.nansum(n) / np.nansum(d))
     report = {"data_root": a.data_root, "split": a.split, "ks": ks, "dt_ms": tr.dt_ms, "Tp": Tp,
-              "linreg_alpha": bl.alpha, "beamlinreg_alpha": bl.alpha_beam, "manifoldlinreg_alpha": bl.alpha_manifold, "groups": {}, "paired": {}}
+              "linreg_alpha": bl.alpha, "beamlinreg_alpha": bl.alpha_beam, "manifoldlinreg_alpha": bl.alpha_manifold, "manifoldcombo_alpha": bl.alpha_combo, "groups": {}, "paired": {}}
     rng = np.random.default_rng(0)
     for j, k in enumerate(ks):
         cols = [m for m in methods if not np.all(np.isnan(num[m][:, j]))]

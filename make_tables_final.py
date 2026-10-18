@@ -88,6 +88,7 @@ def write():
     w("빔 추정(배열 매니폴드)은 모두 같고 빔 계수 예측과 UNet 유무만 다르다. "
       "딥러닝만 = 빔 추정·지름길 없이 UNet이 history에서 직접 예측 (k = 1, 16만 학습), "
       "ManifoldLinReg = 선형 지름길만 (UNet 없음, 닫힌 식 적합), ManifoldPoly2 = 2차 외삽 지름길만 (학습 없음), "
+      "ManifoldCombo = 제안 모델의 지름길(빔계수 history + 2차 외삽값)을 UNet 없이 train ridge로 최적 적합, "
       "BSC-UNet-I = 선형 지름길 + UNet, BSC-UNet-P = 선형 + 2차 외삽 지름길 + UNet (제안). "
       "P − I는 pooled NMSE 차이 (신뢰구간 없음).\n")
     for split in ("test", "guard"):
@@ -98,24 +99,26 @@ def write():
         w("|---|" + "---|" * len(KS))
         w("| 딥러닝만 (지름길 없는 UNet) | " + " | ".join(
             (f"{Gu[str(k)]['all'][f'unet_k{k}']:.2f}" if str(k) in Gu and f"unet_k{k}" in Gu[str(k)]["all"] else "–") for k in KS) + " |")
-        for lab, key in (("선형 지름길만 (ManifoldLinReg)", "ManifoldLinReg"), ("2차 외삽 지름길만 (ManifoldPoly2)", "ManifoldPoly2")):
+        for lab, key in (("선형 지름길만 (ManifoldLinReg)", "ManifoldLinReg"), ("2차 외삽 지름길만 (ManifoldPoly2)", "ManifoldPoly2"),
+                         ("선형 + 2차 외삽 조합, UNet 없음 (ManifoldCombo)", "ManifoldCombo")):
             w(f"| {lab} | " + " | ".join(f"{Gs[str(k)]['all'][key]:.2f}" for k in KS) + " |")
         w("| 선형 지름길 + UNet (BSC-UNet-I) | " + " | ".join(f"{Gs[str(k)]['all'][f'bscI_k{k}']:.2f}" for k in KS) + " |")
         w("| **선형 + 2차 외삽 지름길 + UNet (BSC-UNet-P)** | " + " | ".join(f"**{Gs[str(k)]['all'][f'bscP_k{k}']:.2f}**" for k in KS) + " |")
         w("| Δ P − ManifoldPoly2 | " + " | ".join(fd(Ps[f'bscP_k{k}']['all']['ManifoldPoly2']) for k in KS) + " |")
+        w("| **Δ P − ManifoldCombo (UNet의 순수 기여)** | " + " | ".join(f"**{fd(Ps[f'bscP_k{k}']['all']['ManifoldCombo'])}**" for k in KS) + " |")
         w("| Δ P − BSC-UNet-I | " + " | ".join(f"{Gs[str(k)]['all'][f'bscP_k{k}'] - Gs[str(k)]['all'][f'bscI_k{k}']:+.2f}" for k in KS) + " |\n")
     w("## 표 5. Doppler 변화율 스케일 κ 민감도\n")
     w("κ = 0.155: v9b 기본. κ = 1: 보상 없는 실제 Doppler 변화율 (저장 채널에 빠진 2차 위상을 곱해 생성). "
       "각 조건에서 baseline은 같은 κ의 train/val로 적합하고, 모델은 같은 κ 데이터로 학습했다.\n")
-    w("| κ | split | k | Poly2_blind | ManifoldLinReg | ManifoldPoly2 | BSC-UNet-I | **BSC-UNet-P** | Δ P − ManifoldPoly2 |")
-    w("|---|---|---|---|---|---|---|---|---|")
+    w("| κ | split | k | Poly2_blind | ManifoldLinReg | ManifoldPoly2 | ManifoldCombo | BSC-UNet-I | **BSC-UNet-P** | Δ P − ManifoldCombo |")
+    w("|---|---|---|---|---|---|---|---|---|---|")
     for kap, tag in (("0.155", "eval_v9b_bscP"), ("1", "eval_v9b_bscP_kappa1")):
         for split in ("test", "guard"):
             Gk, Pk = load([f"runs/{tag}_{split}.json"])
             for k in (1, 16):
                 g = Gk[str(k)]["all"]
                 w(f"| {kap} | {split} | {k} | {g['Poly2_blind']:.2f} | {g['ManifoldLinReg']:.2f} | {g['ManifoldPoly2']:.2f} | "
-                  f"{g[f'bscI_k{k}']:.2f} | **{g[f'bscP_k{k}']:.2f}** | {fd(Pk[f'bscP_k{k}']['all']['ManifoldPoly2'])} |")
+                  f"{g['ManifoldCombo']:.2f} | {g[f'bscI_k{k}']:.2f} | **{g[f'bscP_k{k}']:.2f}** | {fd(Pk[f'bscP_k{k}']['all']['ManifoldCombo'])} |")
     w("")
     fb = "runs/eval_bearing_v9b_final.json"
     if os.path.exists(fb):
