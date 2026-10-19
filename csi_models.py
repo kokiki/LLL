@@ -209,19 +209,32 @@ class BeamShortcutUNet(nn.Module):
         return self.unet(torch.cat([x, proj], 1)) + lin
 
 
+_POLY2_CACHE = {}
+
+
+def _poly2_mats(Tp, k, device):
+    """최소제곱 의사역행렬과 외삽 시점 Vandermonde 행 (Tp, k, device별 상수, 한 번만 계산).
+    추론 때마다 pinv(SVD)를 다시 계산하지 않으므로 더 빠르고 CUDA Graph 캡처도 가능하다 (결과는 동일)."""
+    key = (Tp, k, str(device))
+    if key not in _POLY2_CACHE:
+        t = torch.arange(Tp, device=device, dtype=torch.float64) - (Tp - 1)
+        tk = torch.tensor([float(k)], device=device, dtype=torch.float64)
+        V = lambda x, deg: torch.stack([x ** i for i in range(deg, -1, -1)], -1)
+        _POLY2_CACHE[key] = (torch.linalg.pinv(V(t, 1)).T, V(tk, 1).T, torch.linalg.pinv(V(t, 2)).T, V(tk, 2).T)
+    return _POLY2_CACHE[key]
+
+
 def poly2_extrapolate(s: torch.Tensor, k: int) -> torch.Tensor:
     """s (N, Tp) 복소 빔계수 history -> t = k 외삽값 (N,). 위상: 인접 차분 wrap 후 누적(unwrap) -> 2차 최소제곱,
     진폭: 1차 최소제곱 (>= 0). baselines.py Poly2_blind / ManifoldPoly2와 같은 식 (시간축 o = -(Tp-1)..0, 예측 o = k)."""
     Tp = s.shape[-1]
     s64 = s.to(torch.complex128)
-    t = torch.arange(Tp, device=s.device, dtype=torch.float64) - (Tp - 1)
-    tk = torch.tensor([float(k)], device=s.device, dtype=torch.float64)
+    P1T, V1k, P2T, V2k = _poly2_mats(Tp, k, s.device)
     ang = torch.angle(s64)
     dd = torch.remainder(ang[:, 1:] - ang[:, :-1] + math.pi, 2 * math.pi) - math.pi
     ph = torch.cat([ang[:, :1], ang[:, :1] + torch.cumsum(dd, -1)], -1)
-    V = lambda x, deg: torch.stack([x ** i for i in range(deg, -1, -1)], -1)
-    amp = torch.clamp((s64.abs() @ torch.linalg.pinv(V(t, 1)).T) @ V(tk, 1).T, min=0)[:, 0]
-    phk = ((ph @ torch.linalg.pinv(V(t, 2)).T) @ V(tk, 2).T)[:, 0]
+    amp = torch.clamp((s64.abs() @ P1T) @ V1k, min=0)[:, 0]
+    phk = ((ph @ P2T) @ V2k)[:, 0]
     return (amp * torch.exp(1j * phk)).to(s.dtype)
 
 
@@ -239,12 +252,13 @@ class BeamShortcutPolyUNet(BeamShortcutUNet):
         self.c_im = nn.Parameter(torch.zeros(1))
         self.register_buffer("poly_flag", torch.ones(1))
         self.register_buffer("poly_k", torch.tensor([float(k_steps)]))
+        self.k_steps = int(k_steps)                           # forward에서 .item() 동기화 없이 쓰기 위한 파이썬 정수 (CUDA Graph 가능)
 
     def forward(self, x):
         Hc = _to_complex(x)
         a = manifold_beam(Hc)
         s = torch.einsum("ntij,nij->nt", Hc, a.conj())
-        s_poly = poly2_extrapolate(s.detach(), int(self.poly_k.item()))
+        s_poly = poly2_extrapolate(s.detach(), self.k_steps)
         s_hat = s @ torch.complex(self.w_re, self.w_im) + torch.complex(self.c_re, self.c_im) * s_poly
         lin = _to_real((s_hat[:, None, None] * a)[:, None])
         proj = _to_real(s[:, :, None, None] * a[:, None])
@@ -255,11 +269,13 @@ class BeamShortcutPolyUNet(BeamShortcutUNet):
 class BeamAlignedUNet(nn.Module):
     """BSC-UNet-A (ablation): 빔 정렬 좌표 UNet. 입력에 conj(u) (u = 16·a)를 곱해 평면파 위상 기울기를 제거하고
     replicate 패딩 UNet이 정렬 좌표 잔차 R을 예측, 출력 = ŝ·a + R ⊙ u. aligned_flag 버퍼로 표시."""
+    extra_in = 0                                              # 하위 클래스가 UNet 입력 채널을 추가할 때 사용
+
     def __init__(self, in_channels, out_channels=2, dropout=0.5, n_bottleneck_layers=3):
         super().__init__()
         assert out_channels == 2
         self.Tp = in_channels // 2
-        self.unet = GeneratorUNet(2 * in_channels, out_channels, dropout=dropout,
+        self.unet = GeneratorUNet(2 * in_channels + self.extra_in, out_channels, dropout=dropout,
                                   n_bottleneck_layers=n_bottleneck_layers, pad_mode="replicate")
         self.w_re = nn.Parameter(torch.zeros(self.Tp))
         self.w_im = nn.Parameter(torch.zeros(self.Tp))
@@ -276,10 +292,45 @@ class BeamAlignedUNet(nn.Module):
         return _to_real(R * u[:, None]) + lin
 
 
+class BeamAlignedPolyUNet(BeamAlignedUNet):
+    """BSC-UNet-AP: 빔 정렬 좌표 UNet (BSC-UNet-A) + 2차 위상 외삽 빔 지름길 (BSC-UNet-P와 같은 지름길).
+    방위각·off-nadir가 다양한 기하(v10)에서도 UNet이 방향과 무관한 정렬 좌표 잔차만 보도록 하고, Doppler 변화율의 2차 위상은
+    지름길의 외삽으로 따라간다.
+      지름길 ŝ = Σ_l w_l s(l) + c·s_p(k)   (w: 0 초기화, c: 1 초기화 -> 시작점 = ManifoldPoly2)
+      UNet 입력 = [x ⊙ conj(u), s/16 (Tp, 배열 상수), s_p/16 (1, 배열 상수)],  출력 = ŝ·a + UNet ⊙ u
+    aligned_poly_flag, poly_k 버퍼로 표시 (v10 시험 학습의 체크포인트 형식과 같음)."""
+    extra_in = 2
+
+    def __init__(self, in_channels, k_steps, out_channels=2, dropout=0.5, n_bottleneck_layers=3):
+        super().__init__(in_channels, out_channels, dropout, n_bottleneck_layers)
+        self.c_re = nn.Parameter(torch.ones(1))
+        self.c_im = nn.Parameter(torch.zeros(1))
+        self.register_buffer("aligned_poly_flag", torch.ones(1))
+        self.register_buffer("poly_k", torch.tensor([float(k_steps)]))
+        self.k_steps = int(k_steps)
+
+    def forward(self, x):
+        Hc = _to_complex(x)
+        a = manifold_beam(Hc)
+        M, L = a.shape[-2:]
+        u = a * math.sqrt(M * L)
+        s = torch.einsum("ntij,nij->nt", Hc, a.conj())
+        s_poly = poly2_extrapolate(s.detach(), self.k_steps)
+        s_hat = s @ torch.complex(self.w_re, self.w_im) + torch.complex(self.c_re, self.c_im) * s_poly
+        lin = _to_real((s_hat[:, None, None] * a)[:, None])
+        xa = _to_real(Hc * u.conj()[:, None])
+        sa = _to_real((s / math.sqrt(M * L))[:, :, None, None].expand(-1, -1, M, L))
+        sp = _to_real((s_poly / math.sqrt(M * L))[:, None, None, None].expand(-1, 1, M, L))
+        R = _to_complex(self.unet(torch.cat([xa, sa, sp], 1)))
+        return _to_real(R * u[:, None]) + lin
+
+
 def build_model_from_state_dict(sd, Tp, dropout=0.5):
     """체크포인트 키로 구조 판별 -> 생성 (가중치는 호출 측에서 load_state_dict)."""
-    if "aligned_poly_flag" in sd or "aligned_dir_flag" in sd:
-        raise ValueError("BSC-UNet-AP / AD 체크포인트는 csi_models.py에서 지원하지 않음 (논문 제외 시험 모델)")
+    if "aligned_poly_flag" in sd:
+        return BeamAlignedPolyUNet(2 * Tp, int(sd["poly_k"].item()), 2, dropout=dropout)
+    if "aligned_dir_flag" in sd:
+        raise ValueError("BSC-UNet-AD 체크포인트는 csi_models.py에서 지원하지 않음 (논문 제외 시험 모델)")
     if "poly_flag" in sd:
         return BeamShortcutPolyUNet(2 * Tp, int(sd["poly_k"].item()), 2, dropout=dropout)
     if "aligned_flag" in sd:

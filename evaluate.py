@@ -27,7 +27,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data_root", required=True)
     ap.add_argument("--split", default="test", choices=["test", "guard", "val"])
-    ap.add_argument("--ckpt", action="append", default=[], help="NAME=PATH:K_MS (여러 번 가능)")
+    ap.add_argument("--ckpt", action="append", default=[], help="NAME=PATH:K_MS (여러 번 가능). 딥러닝 baseline(models_dl)은 NAME=dl:<model>:PATH:K_MS")
     ap.add_argument("--ks_ms", type=float, nargs="*", default=None, help="baseline horizon들 (기본: ckpt horizon)")
     ap.add_argument("--Tp", type=int, default=None)
     ap.add_argument("--sc_stride", type=int, default=25)
@@ -51,8 +51,14 @@ def main():
     ck = []
     for spec in a.ckpt:
         name, rest = spec.split("=", 1); path, kms = rest.rsplit(":", 1)
-        sd = torch.load(path, map_location=dev, weights_only=True)
-        G = build_model_from_state_dict(sd, Tp, dropout=a.dropout).to(dev)   # 구조는 체크포인트 키로 자동 판별
+        if path.startswith("dl:"):                                          # 딥러닝 baseline (train_baseline_dl.py)
+            from models_dl import build_model
+            _, mname, path = path.split(":", 2)
+            sd = torch.load(path, map_location=dev, weights_only=True)
+            G = build_model(mname, Tp).to(dev)
+        else:
+            sd = torch.load(path, map_location=dev, weights_only=True)
+            G = build_model_from_state_dict(sd, Tp, dropout=a.dropout).to(dev)   # 구조는 체크포인트 키로 자동 판별
         G.load_state_dict(sd); G.eval()
         ck.append((name, G, int(round(float(kms) / tr.dt_ms))))
     ks = sorted({int(round(x / tr.dt_ms)) for x in (a.ks_ms or [])} | {c[2] for c in ck})

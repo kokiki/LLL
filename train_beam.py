@@ -59,7 +59,7 @@ def dir_augment(inp, tgt, gen=None):
         re, im = z[:, :, 0], z[:, :, 1]
         return torch.stack([re * c - im * s, re * s + im * c], 2).reshape(n, 2 * F, H, W)
     return rot(inp, C // 2), rot(tgt, tgt.shape[1] // 2)
-from csi_models import BeamAlignedUNet, BeamShortcutPolyUNet, BeamShortcutUNet, GeneratorUNet
+from csi_models import BeamAlignedPolyUNet, BeamAlignedUNet, BeamShortcutPolyUNet, BeamShortcutUNet, GeneratorUNet
 
 
 def parse_args():
@@ -180,7 +180,7 @@ def main():
     if a.pad_replicate:
         gkw["pad_mode"] = "replicate"
     if a.poly_shortcut:
-        Gcls = BeamShortcutPolyUNet
+        Gcls = BeamAlignedPolyUNet if a.aligned else BeamShortcutPolyUNet     # --aligned --poly_shortcut = BSC-UNet-AP
         G = Gcls(2 * Tp, k, 2, dropout=a.dropout, n_bottleneck_layers=a.n_bottleneck_layers).to(dev)
     else:
         G = Gcls(2 * Tp, 2, dropout=a.dropout, n_bottleneck_layers=a.n_bottleneck_layers, **gkw).to(dev)
